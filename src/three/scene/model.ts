@@ -12,10 +12,18 @@ const shape = new THREE.Shape([
   new THREE.Vector2(-20,80)
 ])
 
-const geometry = new THREE.ShapeGeometry(shape)
+const shape2 = new THREE.Shape([
+  new THREE.Vector2(100, 0),
+  new THREE.Vector2(160, 0),
+  new THREE.Vector2(160, 80),
+  new THREE.Vector2(140, 120),
+]);
+
+const geometry = new THREE.ShapeGeometry([shape, shape2])
 const material = new THREE.MeshLambertMaterial({
   color: 0x00ffff,
-  side: THREE.DoubleSide
+  side: THREE.DoubleSide,
+  // wireframe: true
 })
 const mesh = new THREE.Mesh(geometry, material)
 
