@@ -1,9 +1,27 @@
 <script setup lang="ts">
-import TheWelcome from '../components/TheWelcome.vue'
+import { ref, onMounted } from 'vue'
+import { renderer } from '@/three/RenderLoop'
+
+let container = ref()
+
+onMounted(() => {
+  container.value.appendChild(renderer.domElement)
+})
+
 </script>
 
 <template>
-  <main>
-    <TheWelcome />
-  </main>
+  <div ref="container" class="container">
+
+  </div>
 </template>
+
+
+<style>
+
+.container {
+  height: 100vh;
+}
+
+
+</style>
