@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { ShapeMesh } from '@/three/util/shapeMesh.js';
+import { ExtrudeMesh } from '@/three/util/extrudeMesh.js';
 
 const model = new THREE.Group(); //声明一个组对象，用来添加城市三场场景的模型对象
 const loader = new THREE.FileLoader();
@@ -15,7 +16,10 @@ loader.load('./上海外滩.json', function (data: any) {
         // 把"Polygon"和"MultiPolygon"的geometry.coordinates数据结构处理为一致
         build.geometry.coordinates = [build.geometry.coordinates];
       }
-      buildGroup.add(ShapeMesh(build.geometry.coordinates));
+      // buildGroup.add(ShapeMesh(build.geometry.coordinates));
+      //build.properties.Floor*3近似表示楼的高度
+      var height = build.properties.Floor * 3;
+      buildGroup.add(ExtrudeMesh(build.geometry.coordinates, height));
     }
   });
   model.add(buildGroup);

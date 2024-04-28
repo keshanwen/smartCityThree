@@ -18,7 +18,7 @@ function ShapeMesh(pointsArrs) {
     shapeArr,
   );
   var material = new THREE.MeshLambertMaterial({
-    color: 0x009999,
+    color: 0x009966,
   }); //材质对象
   var mesh = new THREE.Mesh(geometry, material); //网格模型对象
   return mesh;

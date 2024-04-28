@@ -2,6 +2,7 @@
 // 引入Three.js
 import * as THREE from 'three'
 import { model } from '@/three/scene/model'
+import { lon2xy } from '@/three/util/math';
 
 var scene = new THREE.Scene();
 scene.add(model); //三维模型添加到场景中
@@ -21,10 +22,13 @@ var ambient = new THREE.AmbientLight(0xffffff, 0.3);
 scene.add(ambient);
 
 // Three.js三维坐标轴 三个坐标轴颜色RGB分别对应xyz轴
-var axesHelper = new THREE.AxesHelper(250);
-var x = 121.49526536464691; //东方明珠经纬度坐标
-var y = 31.24189350905988;
-axesHelper.position.set(x, y, 0);
+var axesHelper = new THREE.AxesHelper(2500);
+var E = 121.49526536464691;//东方明珠经纬度坐标
+var N = 31.24189350905988;
+var xy = lon2xy(E,N);
+var x = xy.x;
+var y = xy.y;
+axesHelper.position.set(x,y,0);
 scene.add(axesHelper);
 
 export {
