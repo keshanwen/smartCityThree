@@ -1,12 +1,14 @@
 // 场景总文件
 // 引入Three.js
 import * as THREE from 'three'
+import { model } from '@/three/scene/model'
 
 /**
  * 创建场景对象Scene
  */
 var scene = new THREE.Scene();
-// scene.add(model); //三维模型添加到场景中
+scene.add(model); //三维模型添加到场景中
+
 /**
  * 光源设置
  */
