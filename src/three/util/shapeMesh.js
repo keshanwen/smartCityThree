@@ -1,4 +1,5 @@
 import * as THREE from 'three';
+import { lon2xy } from '@/three/util/math.js'
 
 // pointsArrs：多个多边形轮廓
 function ShapeMesh(pointsArrs) {
@@ -7,7 +8,8 @@ function ShapeMesh(pointsArrs) {
     var vector2Arr = [];
     // 转化为Vector2构成的顶点数组
     pointsArr[0].forEach(elem => {
-      vector2Arr.push(new THREE.Vector2(elem[0], elem[1]))
+      const xy = lon2xy(elem[0],elem[1])
+      vector2Arr.push(new THREE.Vector2(xy.x, xy.y))
     });
     var shape = new THREE.Shape(vector2Arr);
     shapeArr.push(shape);
