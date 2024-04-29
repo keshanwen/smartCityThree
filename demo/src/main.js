@@ -39,6 +39,7 @@ var renderer = new THREE.WebGLRenderer();
 renderer.setSize(width, height);
 document.body.appendChild(renderer.domElement);
 
+
 const controls = new OrbitControls(camera, renderer.domElement);
 
 function render() {
@@ -49,80 +50,82 @@ render();
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-var model = new THREE.Group(); //声明一个组对象，用来添加加载成功的三维场景
-
-var c = [
-  0, 0, //顶点1坐标
-  60, 0, //顶点2坐标
-  60, 80, //顶点3坐标
-  40, 120, //顶点4坐标
-  -20, 80, //顶点5坐标
-  0, 0, //顶点6坐标  和顶点1重合
+const model = new THREE.Group()
+const c = [
+  0, 0, // 顶点1坐标
+  60, 0, // 顶点2坐标
+  60, 80, // 顶点3坐标
+  40, 120, // 顶点4坐标
+  -20, 80, // 顶点5坐标
+  0, 0 // 顶点6坐标
 ]
-var posArr = [];
-var uvrr = [];
-var h = 20; //围墙拉伸高度
-for (var i = 0; i < c.length - 2; i += 2) {
-  // 围墙多边形上两个点构成一个直线扫描出来一个高度为h的矩形
+const posArr = []
+const uvrr = []
+const h = 20
+for (let i = 0; i < c.length - 2; i += 2) {
   // 矩形的三角形1
   posArr.push(c[i], c[i + 1], 0, c[i + 2], c[i + 3], 0, c[i + 2], c[i + 3], h);
   // 矩形的三角形2
   posArr.push(c[i], c[i + 1], 0, c[i + 2], c[i + 3], h, c[i], c[i + 1], h);
 
-  // 注意顺序问题，和顶点位置坐标对应
-  uvrr.push(0, 0, 1, 0, 1, 1);
-  uvrr.push(0, 0, 1, 1, 0, 1);
+
+// 注意顺序问题，和顶点位置坐标对应
+// uvrr.push(0, 0, 1, 0, 1, 1);
+// uvrr.push(0, 0, 1, 1, 0, 1);
+// 所有点展开  x方向从零到1   所有点生成的矩形铺满一张纹理贴图
+  uvrr.push(i / c.length, 0, i / c.length + 2 / c.length, 0, i / c.length + 2 / c.length, 1);
+  uvrr.push(i / c.length, 0, i / c.length + 2 / c.length, 1, i / c.length, 1);
 }
 
 
-
-var geometry = new THREE.BufferGeometry(); //声明一个空几何体对象
-// 设置几何体attributes属性的位置position属性
-geometry.attributes.position = new THREE.BufferAttribute(new Float32Array(posArr), 3);
-// 设置几何体attributes属性的位置uv属性
-geometry.attributes.uv = new THREE.BufferAttribute(new Float32Array(uvrr), 2);
+const geometry = new THREE.BufferGeometry()
+geometry.attributes.position = new THREE.BufferAttribute(new Float32Array(posArr), 3)
+geometry.attributes.uv = new THREE.BufferAttribute(new Float32Array(uvrr), 2)
 geometry.computeVertexNormals()
-var texture = new THREE.TextureLoader().load('./流动.png');
-// 设置阵列模式为 RepeatWrapping
+
+const texture = new THREE.TextureLoader().load('./流光.png')
 texture.wrapS = THREE.RepeatWrapping
 texture.wrapT = THREE.RepeatWrapping
-
-
+texture.repeat.x = 3;// x方向阵列
+texture.repeat.y = 3;// y方向阵列
 function flowAnimation() {
   requestAnimationFrame(flowAnimation);
-  // 使用加减法可以设置不同的运动方向
-  // 设置纹理偏移
-  // y方向流量  光带流动效果
-  texture.offset.y -= 0.02;
-  // texture.offset.x -= 0.06;
+  // texture.offset.y -= 0.02;
+  texture.offset.x -= 0.02;
 }
 flowAnimation();
 
-var material = new THREE.MeshLambertMaterial({
-  color: 0x00ffff,
+
+
+const material = new THREE.MeshLambertMaterial({
   map: texture,
-  side: THREE.DoubleSide, //两面可见
-  transparent: true, //需要开启透明度计算，否则着色器透明度设置无效
-  // opacity: 0.5,//整体改变透明度
+  color: 0xffff00,
+  side: THREE.DoubleSide,
+  transparent: true,
   depthTest: false,
-});
-var mesh = new THREE.Mesh(geometry, material); //网格模型对象Mesh
+  // wireframe: true
+})
+
+const mesh = new THREE.Mesh(geometry, material)
 mesh.rotateX(-Math.PI / 2);
-model.add(mesh);
+
+
+model.add(mesh)
 
 
 
 const mesh2 = mesh.clone()
-mesh2.material = mesh.material.clone()
-mesh2.material.map = new THREE.TextureLoader().load('./渐变.png')
-mesh2.material.color.set(0x00ffff);
-mesh2.scale.set(1.01, 1.01, 1.0);
+mesh2.material = new THREE.MeshLambertMaterial({
+  color: 0x00ffff,
+  map: new THREE.TextureLoader().load('./渐变.png'),
+  side: THREE.DoubleSide,
+  transparent: true,
+  opacity: 0.5,
+  depthTest: false
+})
 model.add(mesh2)
 
-
-
 scene.add(model)
-
 
 
 
