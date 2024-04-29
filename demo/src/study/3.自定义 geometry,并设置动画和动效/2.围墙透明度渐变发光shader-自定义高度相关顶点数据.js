@@ -81,7 +81,7 @@ var material = new THREE.MeshLambertMaterial({
   transparent: true, // 需要开启透明度计算，否则着色器透明度设置无效
   opacity: 0.5, // 整体改变透明度
   depthTest: false
- // wireframe: true,//查看三角形结构
+  // wireframe: true,//查看三角形结构
 });
 
 const postAtt = geometry.attributes.position // 几何体顶点位置缓冲区对象
