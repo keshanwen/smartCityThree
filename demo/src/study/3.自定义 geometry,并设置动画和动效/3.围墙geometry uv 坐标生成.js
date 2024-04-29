@@ -83,7 +83,7 @@ const material = new THREE.MeshLambertMaterial({
   color: 0x00ffff,
   side: THREE.DoubleSide,
   transparent: true,
- // opacity: 0.5,
+  // opacity: 0.5,
   depthTest: false,
   // wireframe: true,
   map: new THREE.TextureLoader().load('./渐变.png')
