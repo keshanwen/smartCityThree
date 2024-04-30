@@ -54,7 +54,7 @@ const textureLoader = new THREE.TextureLoader();
 const texture = textureLoader.load('./ca.jpeg')
 
 
-const geometry = new THREE.PlaneGeometry(1, 1,64,64)
+const geometry = new THREE.PlaneGeometry(1, 1, 64, 64)
 const shaderMaterial = new THREE.RawShaderMaterial({
   vertexShader: basicVertexShader,
   fragmentShader: basicFragmentShader,
