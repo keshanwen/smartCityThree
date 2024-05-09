@@ -3,8 +3,8 @@ import * as THREE from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 
 import * as dat from "dat.gui";
-import basicVertexShader from "./shader/basic/vertex.glsl";
-import basicFragmentShader from "./shader/basic/fragment.glsl";
+import basicVertexShader from "./shader/deep/vertex.glsl";
+import basicFragmentShader from "./shader/deep/fragment.glsl";
 
 //创建gui对象
 const gui = new dat.GUI();
