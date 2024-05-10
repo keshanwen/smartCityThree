@@ -95,7 +95,9 @@ geometry2.attributes.color = new THREE.BufferAttribute(new Float32Array(colorArr
 // 点模型渲染几何体每个顶点
 const PointsMaterial = new THREE.PointsMaterial({
   size: 5.0,
-  vertexColors: true
+  vertexColors: true,
+  transparent: true,
+  depthTest: false
 })
 const flyPoints = new THREE.Points(geometry2, PointsMaterial)
 model.add(flyPoints)
@@ -119,6 +121,16 @@ PointsMaterial.onBeforeCompile = (shader) => {
       'gl_PointSize = percent * size;',
     ].join('\n') // .join()把数组元素合成字符串
   )
+
+  shader.fragmentShader = shader.fragmentShader.replace(
+    '#include <premultiplied_alpha_fragment>',
+    [
+      '#include <premultiplied_alpha_fragment>',
+      'gl_FragColor.a = 0.5;'
+    ].join('\n')
+  )
+
+  console.log(shader.fragmentShader)
 }
 
 // 飞线动画
