@@ -126,8 +126,7 @@ PointsMaterial.onBeforeCompile = (shader) => {
     '#include <premultiplied_alpha_fragment>',
     [
       '#include <premultiplied_alpha_fragment>',
-      'float r = distance(gl_PointCoord, vec2(0.5, 0.5));',
-      'gl_FragColor.a = 0.6 - r;'
+      'gl_FragColor.a = 0.5;'
     ].join('\n')
   )
 
@@ -146,7 +145,7 @@ function animation() {
 
   requestAnimationFrame(animation)
 }
-animation()
+// animation()
 
 plane();//设置一个地面
 function plane() {
