@@ -39,7 +39,15 @@ window.onresize = function () {
   camera.updateProjectionMatrix();
 };
 
+function render() {
+  renderer.render(scene, camera);
+  requestAnimationFrame(render);
+  // console.log(camera.position);
+
+}
+render();
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+
 
 
 //const geometry = new THREE.RingGeometry(12, 20, 60)
@@ -52,7 +60,21 @@ const material = new THREE.MeshLambertMaterial({
 
 const mesh = new THREE.Mesh(geometry, material)
 // mesh.rotation.x = -Math.PI / 2
-mesh.translateY(40)
+// mesh.position.y = 0;
+// mesh.position.y = 25;
+// mesh.position.y = 40
+// mesh.position.y = 50;
+// mesh.rotateZ(Math.PI / 6);
+
+mesh.position.x = 20
+mesh.position.z = 20
+mesh.position.y = 40
+
+// 查看模型局部坐标系：判断几何体顶点坐标分布情况
+const axesHelper2 = new THREE.AxesHelper(100);
+mesh.add(axesHelper2);
+
+
 
 
 material.onBeforeCompile = (shader) => {
@@ -62,15 +84,14 @@ material.onBeforeCompile = (shader) => {
     varying vec3 vPosition;//顶点位置插值后的坐标
     void main(){
       // 顶点位置坐标模型矩阵变换后，进行插值计算
-      vPosition = vec3(modelMatrix * vec4( position, 1.0 ));
+      // vPosition = vec3(modelMatrix * vec4( position, 1.0 ));
+      vPosition = position;//不考虑模型旋转缩放平移变换(modelMatrix)
     `
   );
 
   shader.fragmentShader = shader.fragmentShader.replace(
     'void main() {',
     `
-    uniform float y; //变化的y控制光带高度
-    float w = 10.0;//光带宽度一半
     varying vec3 vPosition;
     void main() {
     `
@@ -81,25 +102,17 @@ material.onBeforeCompile = (shader) => {
     '#include <dithering_fragment>',
     `
   #include <dithering_fragment>
-  // 如果让y随着时间的变化，就可以实现一个动态的扫光效果。
-        // y随着时间改变光带位置也会改变
-    if (vPosition.y >= y && vPosition.y < y + w) {
-      float per = (vPosition.y - y) / w;//范围0~1
-      per = pow(per, 2.0);//平方
-      gl_FragColor.rgb = mix( vec3(1.0,1.0,1.0),gl_FragColor.rgb, per);
+  float y0 = 0.0;
+  for (int i = 0; i < 4; i++) {
+    y0 += 20.0;
+    if(vPosition.y > y0 && vPosition.y < y0+1.0 ){
+      gl_FragColor = vec4(1.0,1.0,0.0,1.0);
     }
-    if (vPosition.y <= y && vPosition.y > y - w) {
-      float per = (y - vPosition.y) / w;//范围0~1
-      per = pow(per, 2.0);//平方
-      gl_FragColor.rgb = mix( vec3(1.0,1.0,1.0),gl_FragColor.rgb, per);
-
-    }
+  }
   `
   );
 
-
-  shader.uniforms.y = { value: 30 }
-  mesh.shader = shader
+  console.log(shader.fragmentShader)
 }
 
 scene.add(mesh)
@@ -123,20 +136,7 @@ function plane() {
   scene.add(mesh)
 }
 
-const clock = new THREE.Clock();
-function render() {
-  const deltaTime = clock.getDelta();
-  renderer.render(scene, camera);
-  // console.log(camera.position);
-  if (mesh.shader) {
-    // enderer.render执行一次，才能获取到mesh.shader
-    mesh.shader.uniforms.y.value += 30 * deltaTime;
-    // 一旦y接近模型mesh顶部，重新设置为0，这样扫光反复循环
-    if (mesh.shader.uniforms.y.value > 80) mesh.shader.uniforms.y.value = 0;
-  }
-  requestAnimationFrame(render);
-}
-render();
+
 
 
 

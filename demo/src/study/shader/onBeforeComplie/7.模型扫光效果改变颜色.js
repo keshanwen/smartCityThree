@@ -86,12 +86,12 @@ material.onBeforeCompile = (shader) => {
     if (vPosition.y >= y && vPosition.y < y + w) {
       float per = (vPosition.y - y) / w;//范围0~1
       per = pow(per, 2.0);//平方
-      gl_FragColor.rgb = mix( vec3(1.0,1.0,1.0),gl_FragColor.rgb, per);
+      gl_FragColor.rgb = mix( vec3(0.3,1.0,1.0),gl_FragColor.rgb, per);
     }
     if (vPosition.y <= y && vPosition.y > y - w) {
       float per = (y - vPosition.y) / w;//范围0~1
       per = pow(per, 2.0);//平方
-      gl_FragColor.rgb = mix( vec3(1.0,1.0,1.0),gl_FragColor.rgb, per);
+      gl_FragColor.rgb = mix( vec3(0.3,1.0,1.0),gl_FragColor.rgb, per);
 
     }
   `
@@ -99,6 +99,8 @@ material.onBeforeCompile = (shader) => {
 
 
   shader.uniforms.y = { value: 30 }
+  console.log(shader.uniforms)
+
   mesh.shader = shader
 }
 

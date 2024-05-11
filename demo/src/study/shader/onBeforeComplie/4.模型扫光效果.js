@@ -70,7 +70,6 @@ material.onBeforeCompile = (shader) => {
     'void main() {',
     `
     uniform float y; //变化的y控制光带高度
-    float w = 10.0;//光带宽度一半
     varying vec3 vPosition;
     void main() {
     `
@@ -82,23 +81,16 @@ material.onBeforeCompile = (shader) => {
     `
   #include <dithering_fragment>
   // 如果让y随着时间的变化，就可以实现一个动态的扫光效果。
-        // y随着时间改变光带位置也会改变
-    if (vPosition.y >= y && vPosition.y < y + w) {
-      float per = (vPosition.y - y) / w;//范围0~1
-      per = pow(per, 2.0);//平方
-      gl_FragColor.rgb = mix( vec3(1.0,1.0,1.0),gl_FragColor.rgb, per);
-    }
-    if (vPosition.y <= y && vPosition.y > y - w) {
-      float per = (y - vPosition.y) / w;//范围0~1
-      per = pow(per, 2.0);//平方
-      gl_FragColor.rgb = mix( vec3(1.0,1.0,1.0),gl_FragColor.rgb, per);
-
+    if (vPosition.y > y && vPosition.y < y + 1.0) {
+      gl_FragColor = vec4(1.0, 1.0, 0.0, 1.0);
     }
   `
   );
 
 
   shader.uniforms.y = { value: 30 }
+  console.log(shader.uniforms)
+
   mesh.shader = shader
 }
 
