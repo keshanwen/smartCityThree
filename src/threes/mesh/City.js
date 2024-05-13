@@ -3,6 +3,7 @@ import * as THREE from "three";
 import scene from "../scene";
 import modifyCityMaterial from "../modify/modifyCityMaterial";
 import MeshLine from "./MeshLine";
+import { Fyline } from "./Fyline";
 
 export default function createCity() {
   const gltfLoader = new GLTFLoader();
@@ -27,6 +28,7 @@ export default function createCity() {
     });
     scene.add(gltf.scene);
 
-
+    // 添加飞线
+    scene.add(Fyline)
   });
 }
