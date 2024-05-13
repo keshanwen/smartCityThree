@@ -23,14 +23,20 @@ export function addGradColor(shader, mesh) {
   //   console.log(mesh.geometry.boundingBox);
 
   let { min, max } = mesh.geometry.boundingBox;
+
   //   获取物体的高度差
   let uHeight = max.y - min.y;
 
   shader.uniforms.uTopColor = {
-    value: new THREE.Color("#aaaeff"),
+    value: new THREE.Color("#aaaeff"), // 0x009966
   };
+
   shader.uniforms.uHeight = {
     value: uHeight,
+  };
+
+  shader.uniforms.uHeightMax = {
+    value: max.y,
   };
 
   shader.vertexShader = shader.vertexShader.replace(
@@ -56,10 +62,17 @@ export function addGradColor(shader, mesh) {
 
       uniform vec3 uTopColor;
       uniform float uHeight;
+      uniform float uHeightMax;
       varying vec3 vPosition;
 
         `
   );
+
+  /*
+    混合
+    vec3 mix(vec3 x, vec3 y, vec3 a)
+    x×(1−a)+y×a
+  */
   shader.fragmentShader = shader.fragmentShader.replace(
     "//#end#",
     `
@@ -68,13 +81,21 @@ export function addGradColor(shader, mesh) {
 
       // 设置混合的百分比
       float gradMix = (vPosition.y+uHeight/2.0)/uHeight;
+     // float gradMix = (vPosition.y-uHeightMax)/uHeight;
       // 计算出混合颜色
-      vec3 gradMixColor = mix(distGradColor.xyz,uTopColor,gradMix);
-      gl_FragColor = vec4(gradMixColor,1);
+      vec3 gradMixColor = mix(distGradColor.xyz,uTopColor, gradMix);
+      if (uHeightMax == vPosition.y) {
+        gl_FragColor = vec4(1.0,0.0,0.0,1);
+      } else {
+        gl_FragColor = vec4(gradMixColor,1);
+      }
+      // gl_FragColor = vec4(gradMixColor,1);
         //#end#
 
       `
   );
+
+  // console.log(shader.fragmentShader, 'shader.fragmentShader')
 }
 // 添加建筑材质光波扩散特效
 export function addSpread(shader, center = new THREE.Vector2(0, 0)) {
