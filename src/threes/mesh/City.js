@@ -2,6 +2,7 @@ import { GLTFLoader } from "three/examples/jsm/loaders/GLTFLoader";
 import * as THREE from "three";
 import scene from "../scene";
 import modifyCityMaterial from "../modify/modifyCityMaterial";
+import MeshLine from "./MeshLine";
 
 export default function createCity() {
   const gltfLoader = new GLTFLoader();
@@ -16,12 +17,12 @@ export default function createCity() {
         });
         item.material = cityMaterial;
         modifyCityMaterial(item);
-        // if (item.name == "Layerbuildings") {
-        //   const meshLine = new MeshLine(item.geometry);
-        //   const size = item.scale.x;
-        //   meshLine.mesh.scale.set(size, size, size);
-        //   scene.add(meshLine.mesh);
-        // }
+        if (item.name == "Layerbuildings") {
+          const meshLine = new MeshLine(item.geometry);
+          const size = item.scale.x;
+          meshLine.mesh.scale.set(size, size, size);
+          scene.add(meshLine.mesh);
+        }
       }
     });
     scene.add(gltf.scene);
