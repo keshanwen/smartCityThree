@@ -5,6 +5,7 @@ import modifyCityMaterial from "../modify/modifyCityMaterial";
 import MeshLine from "./MeshLine";
 import { Fyline } from "./Fyline";
 import LightWall from "./LightWall";
+import Grain from "./Grain";
 
 export default function createCity() {
   const gltfLoader = new GLTFLoader();
@@ -22,7 +23,7 @@ export default function createCity() {
           const meshLine = new MeshLine(item.geometry);
           const size = item.scale.x;
           meshLine.mesh.scale.set(size, size, size);
-          scene.add(meshLine.mesh);
+         scene.add(meshLine.mesh);
         }
       }
     });
@@ -31,8 +32,12 @@ export default function createCity() {
     // 添加飞线
     scene.add(Fyline)
 
-    // 添加光墙
+    // // 添加光墙
     const lightWall = new LightWall();
     scene.add(lightWall.mesh);
+
+    // 添加粒子特效
+    const grain = new Grain()
+    scene.add(grain.group)
   });
 }
