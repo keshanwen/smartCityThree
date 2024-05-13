@@ -21,6 +21,9 @@ import axesHelper from "@/threes/axesHelper";
 import renderer from "@/threes/renderer";
 // 初始化调整屏幕
 import "@/threes/init";
+// 导入添加物体函数
+import createMesh from "@/threes/createMesh";
+
 // 导入每一帧的执行函数
 import animate from "@/threes/animate";
 
@@ -28,6 +31,9 @@ import animate from "@/threes/animate";
 let container = ref()
 scene.add(camera)
 scene.add(axesHelper)
+
+// 创建物体
+createMesh()
 
 
 onMounted(() => {
