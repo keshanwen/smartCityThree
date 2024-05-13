@@ -4,6 +4,7 @@ import scene from "../scene";
 import modifyCityMaterial from "../modify/modifyCityMaterial";
 import MeshLine from "./MeshLine";
 import { Fyline } from "./Fyline";
+import LightWall from "./LightWall";
 
 export default function createCity() {
   const gltfLoader = new GLTFLoader();
@@ -30,5 +31,9 @@ export default function createCity() {
 
     // 添加飞线
     scene.add(Fyline)
+
+    // 添加光墙
+    const lightWall = new LightWall();
+    scene.add(lightWall.mesh);
   });
 }

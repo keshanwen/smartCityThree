@@ -91,7 +91,7 @@ PointsMaterial.onBeforeCompile = (shader) => {
     ].join('\n')
   )
 
-  console.log(shader.fragmentShader)
+  // console.log(shader.fragmentShader)
 }
 
 // 飞线动画
