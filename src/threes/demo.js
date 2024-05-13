@@ -59,3 +59,35 @@ function  addGradColor(shader, mesh) {
 }
 
 // float gradMix = (vPosition.y-uMinHeight)/uHeight;
+
+function addSpread(shader, center = new THREE.Vector2(0,0)) {
+  shader.uniforms.uSpreadCenter = {
+    value: center
+  }
+
+  shader.uniforms.uSpreadTime = {
+    value: -2000
+  }
+
+  shader.uniforms.uSpreadWidth = {
+    value: 40
+  }
+
+  shader.fragmentShader = shader.fragmentShader.replace(
+    "#include <common>",
+    `
+      #include <common>
+
+      uniform vec2 uSpreadCenter;
+      uniform float uSpreadTime;
+      uniform float uSpreadWidth;
+      `
+  );
+
+  shader.fragmentShader = shader.fragmentShader.replace(
+    "//#end#",
+    `
+      float spreadRadius = distance(vPosition.xz,uSpreadCneter);
+    `
+  )
+}

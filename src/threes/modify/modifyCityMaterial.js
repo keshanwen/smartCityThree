@@ -102,9 +102,9 @@ export function addSpread(shader, center = new THREE.Vector2(0, 0)) {
   // 设置扩散的中心点
   shader.uniforms.uSpreadCenter = { value: center };
   //   扩散的时间
-  shader.uniforms.uSpreadTime = { value: -2000 };
+  shader.uniforms.uSpreadTime = { value: 0 };
   //   设置条带的宽度
-  shader.uniforms.uSpreadWidth = { value: 40 };
+  shader.uniforms.uSpreadWidth = { value: 200 };
 
   shader.fragmentShader = shader.fragmentShader.replace(
     "#include <common>",
@@ -125,16 +125,23 @@ export function addSpread(shader, center = new THREE.Vector2(0, 0)) {
     float spreadIndex = -(spreadRadius-uSpreadTime)*(spreadRadius-uSpreadTime)+uSpreadWidth;
 
     if(spreadIndex>0.0){
-        gl_FragColor = mix(gl_FragColor,vec4(1,1,1,1),spreadIndex/uSpreadWidth);
+        gl_FragColor = mix(gl_FragColor,vec4(1.0,0,0,1),spreadIndex/uSpreadWidth);
     }
+
+    // if (uSpreadTime > 300) {
+    //   uSpreadTime = 0.0;
+    // } else if (uSpreadTime < spreadRadius && spreadRadius < uSpreadTime + uSpreadWidth) {
+    //   float a = (spreadRadius - uSpreadTime) * / uSpreadWidth;
+    //   gl_FragColor = vec4(1.0,0,0,1.0);
+    // }
 
     //#end#
     `
   );
 
   gsap.to(shader.uniforms.uSpreadTime, {
-    value: 400,
-    duration: 3,
+    value: 300,
+    duration: 4,
     ease: "none",
     repeat: -1,
   });
