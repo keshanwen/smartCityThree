@@ -10,9 +10,11 @@ export default class Grain {
     // this.geometry = edges;
     // this.mesh = line;
     const geometry = new THREE.SphereGeometry(0.05);
-    const material = new THREE.MeshBasicMaterial({ color: 'red', transparent: true });
+    const material = new THREE.MeshBasicMaterial({ color: 'red', transparent: true, opacity: 0.6 });
     this.group = new THREE.Group()
     this.meshs = []
+
+    // material.
 
     for (let i = 0; i < 10; i++) {
       const mesh = new THREE.Mesh(geometry, material);
