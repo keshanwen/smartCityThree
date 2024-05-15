@@ -55,6 +55,7 @@ void main(){
 const fragmentShader = `
 varying vec3 vPosition;
 void main() {
+    // float per = (vPosition.y + 25.0)/50.0;
     float per = (vPosition.y)/50.0;
     // 几何体顶点y坐标25，颜色值：1  0  0(红色)
     // 几何体顶点y坐标-25，颜色值：0  1  0(绿色)

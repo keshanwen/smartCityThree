@@ -1,7 +1,20 @@
-const geometry = new THREE.BufferGeometry(); //创建一个几何体对象
-const vertices = new Float32Array([//类型数组创建顶点数据
-  0, 0, 0, //顶点1坐标
-  50, 0, 0, //顶点2坐标
-  0, 25, 0, //顶点3坐标
-]);
-geometry.attributes.position = new THREE.BufferAttribute(vertices, 3);
+// 顶点着色器代码
+const vertexShader = `
+varying vec3 vPosition;
+void main(){
+  // vPosition = position;
+  // 考虑mesh及其父对象旋转、缩放、平移的影响
+  vPosition = vec3(modelMatrix * vec4( position, 1.0 ));
+  gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
+}
+`
+// 片元着色器代码
+const fragmentShader = `
+varying vec3 vPosition;
+void main() {
+    float per = vPosition.y /50.0;
+    // Mesh y坐标50，颜色值：1  0  0(红色)
+    // Mesh y坐标0，颜色值：0  1  0(绿色)
+    gl_FragColor = vec4(per,1.0-per,0.0,1.0);
+}
+`
