@@ -38,36 +38,38 @@ window.onresize = function () {
 
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
-const geometry = new THREE.PlaneGeometry(100, 50);
+const geometry = new THREE.PlaneGeometry(100, 70);
 
-// 顶点着色器代码
+const texture = new THREE.TextureLoader().load('ca.jpeg');
+
+
 const vertexShader = `
-varying vec3 vPosition;//表示顶点插值后位置数据，与片元数量相同，一一对应
+varying vec2 vUv;
 void main(){
-  //vPosition = position;// 顶点位置坐标插值计算
-   // 考虑mesh及其父对象旋转、缩放、平移的影响
-  vPosition = vec3(modelMatrix * vec4( position, 1.0 ));
+  vUv = uv;// UV坐标插值计算
   gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
 }
 `
-
-// 片元着色器代码
 const fragmentShader = `
-varying vec3 vPosition;
+uniform sampler2D map;//颜色贴图变量
+varying vec2 vUv;
 void main() {
-    float per = (vPosition.y)/50.0;
-    // 几何体顶点y坐标25，颜色值：1  0  0(红色)
-    // 几何体顶点y坐标-25，颜色值：0  1  0(绿色)
-    gl_FragColor = vec4(per,1.0-per,0.0,1.0);
+    // 通过几何体的UV坐标从颜色贴图获取像素值
+    gl_FragColor = texture2D( map, vUv );
 }
 `
+
 
 
 
 const material = new THREE.ShaderMaterial({
+  uniforms: {
+    // 给着色器中同名uniform变量map传值
+    map: { value: texture },
+  },
   vertexShader: vertexShader,
   fragmentShader: fragmentShader,
-  vertexColors: true,//允许设置使用顶点颜色渲染
+  vertexColors: true,//允许设置使用顶点颜色渲染,
 });
 
 
