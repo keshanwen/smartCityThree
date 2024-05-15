@@ -6,9 +6,28 @@ const vertices = new Float32Array([
   75, 0, 0, //顶点4坐标
   100, 0, 0, //顶点5坐标
 ]);
+//3个为一组，表示一个顶点的xyz坐标
 geometry.attributes.position = new THREE.BufferAttribute(vertices, 3);
-const material = new THREE.PointsMaterial({
-  color: 0x00ffff,
-  size: 10.0 //点渲染大小调节
-});
-const points = new THREE.Points(geometry, material); //点模型对象
+const sizes = new Float32Array([
+  1.0, //顶点1对应方形点尺寸缩放倍数
+  0.8, //顶点2
+  0.6, //顶点3
+  0.4, //顶点4
+  0.2, //顶点5
+]);
+// 1个数为一组表示对应顶点gl_PointSize的缩放倍数
+geometry.attributes.size = new THREE.BufferAttribute(sizes, 1);
+
+
+// 几何体自定的size属性
+geometry.attributes.size = new THREE.BufferAttribute(sizes, 1);
+
+// 顶点着色器代码
+const vertexShader = `
+attribute float size;
+void main(){
+  gl_PointSize = 20.0 * size;
+  gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
+}
+`
+
