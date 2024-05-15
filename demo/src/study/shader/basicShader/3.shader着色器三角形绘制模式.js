@@ -1,6 +1,9 @@
 import * as THREE from "three";
 
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
+import vertexShader from '@/shader/wave/vertex.glsl';
+import fragmentShader from '@/shader/wave/fragment.glsl'
+
 
 
 
@@ -39,48 +42,21 @@ window.onresize = function () {
 // ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 
 
-const geometry = new THREE.BufferGeometry(); //创建一个几何体对象
-const vertices = new Float32Array([//类型数组创建顶点数据
-  0, 0, 0, //顶点1坐标
-  50, 0, 0, //顶点2坐标
-  0, 25, 0, //顶点3坐标
-]);
-geometry.attributes.position = new THREE.BufferAttribute(vertices, 3);
-
-const colors = new Float32Array([
-  1, 0, 0, //顶点1颜色
-  0, 0, 1, //顶点2颜色
-  0, 1, 0, //顶点3颜色
-]);
-geometry.attributes.color = new THREE.BufferAttribute(colors, 3);
-
-// 顶点着色器代码
-const vertexShader = `
-// attribute vec3 color;//默认提供不用手写
-varying vec3 vColor;// varying关键字声明一个变量表示顶点颜色插值后的结果
-void main(){
-  vColor = color;// 顶点颜色数据进行插值计算
-  // 投影矩阵 * 模型视图矩阵 * 模型顶点坐标
-  gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
-}
-`
-// 片元着色器代码
-const fragmentShader = `
-varying vec3 vColor;// 顶点片元化后有多少个片元,顶点颜色插值后就有多少个颜色数据
-void main() {
-    gl_FragColor = vec4(vColor,1.0);
-}
-`
-
-
-
+const geometry = new THREE.PlaneGeometry(0.5, 0.8)
 const material = new THREE.ShaderMaterial({
-  vertexShader: vertexShader,
-  fragmentShader: fragmentShader,
-  vertexColors: true,//允许设置使用顶点颜色渲染
-});
-
-
+  vertexShader: `
+    void main() {
+      // 逐顶点处理：顶点位置数据赋值给内置变量gl_Position
+      gl_Position = vec4( position, 1.0 );
+    }
+  `,
+  fragmentShader: `
+    void main() {
+      // 逐片元处理：每个片元或者说像素设置为红色
+      gl_FragColor = vec4(1.0,0.0,0.0,1.0);
+    }
+  `
+})
 // 创建一个网格模型 三角形渲染模式
 const mesh = new THREE.Mesh(geometry, material)
 scene.add(mesh)
