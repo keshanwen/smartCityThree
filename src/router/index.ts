@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 // import HomeView from '../views/HomeView.vue'
 import AboutView from '../views/AboutView.vue';
+import editorIndex from '@/views/editor/index.vue'
 
 
 const router = createRouter({
@@ -9,7 +10,12 @@ const router = createRouter({
     {
       path: '/',
       name: 'home',
-      component: AboutView,
+      component: editorIndex,
+    },
+    {
+      path: '/editor',
+      name: 'editor',
+      component: () => import('@/views/editor/editor.vue'),
     },
     {
       path: '/about',
