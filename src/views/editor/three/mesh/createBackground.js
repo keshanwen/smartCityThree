@@ -22,11 +22,13 @@ export function cretateBackground() {
 
 
 export function plane() {
-  var gridHelper = new THREE.GridHelper(1000, 80, 0x003333, 0x003333);
+  // var gridHelper = new THREE.GridHelper(1000, 80, 0x003333, 0x003333);
+  var gridHelper = new THREE.GridHelper(1000, 80, '#1111D4', '#1111D4');
   var geometry = new THREE.PlaneGeometry(1001, 1001);
   var material = new THREE.MeshBasicMaterial({
     // map: texture,
     color: 0xffffff,
+   // color: '#2181E6',
     transparent: true,
     opacity: 0.8,
     side: THREE.DoubleSide,
