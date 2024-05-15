@@ -13,6 +13,7 @@ import { ref, nextTick, onMounted } from 'vue'
 import * as THREE from 'three';
 import { getContainerWH } from '@/views/editor/three/util'
 import InitThree from '@/views/editor/three/index'
+import { cretateBackground, plane } from '@/views/editor/three/mesh/createBackground.js'
 
 
 let containerRef = ref()
@@ -36,12 +37,22 @@ async function initConfig() {
 }
 
 function test() {
-    const geometry = new THREE.BoxGeometry(4, 4, 4)
+    const geometry = new THREE.BoxGeometry(40, 40, 40)
     const material = new THREE.MeshLambertMaterial({
       color: 'red'
     })
-    const mesh = new THREE.Mesh(geometry, material)
+  const mesh = new THREE.Mesh(geometry, material)
+    mesh.position.y += 20
     app.scene.add(mesh)
+}
+
+function initBackground() {
+  const backgroundMesh = cretateBackground()
+  const { gridHelper,mesh } = plane()
+
+  app.scene.add(backgroundMesh)
+  app.scene.add(gridHelper)
+  app.scene.add(mesh)
 }
 
 async function init() {
@@ -55,8 +66,8 @@ async function init() {
       series: [],
     })
 
-    test()
-
+   test()
+   initBackground()
   } catch (error) {
     console.log(error)
   }
