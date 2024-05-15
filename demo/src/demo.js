@@ -1,27 +1,14 @@
-
-
-const vertexShader = `
-varying vec2 vUv;
-void main(){
-  vUv = uv;// UV坐标插值计算
-  gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
-}
-`
-const fragmentShader = `
-uniform sampler2D map;//颜色贴图变量
-varying vec2 vUv;
-void main() {
-    // 通过几何体的UV坐标从颜色贴图获取像素值
-    gl_FragColor = texture2D( map, vUv );
-}
-`
-const texture = new THREE.TextureLoader().load('./Earth.png');
-const material = new THREE.ShaderMaterial({
-  uniforms: {
-    // 给着色器中同名uniform变量map传值
-    map: { value: texture },
-  },
-  vertexShader: vertexShader,// 顶点着色器
-  fragmentShader: fragmentShader,// 片元着色器
+const geometry = new THREE.BufferGeometry();
+const vertices = new Float32Array([
+  0, 0, 0, //顶点1坐标
+  25, 0, 0, //顶点2坐标
+  50, 0, 0, //顶点3坐标
+  75, 0, 0, //顶点4坐标
+  100, 0, 0, //顶点5坐标
+]);
+geometry.attributes.position = new THREE.BufferAttribute(vertices, 3);
+const material = new THREE.PointsMaterial({
+  color: 0x00ffff,
+  size: 10.0 //点渲染大小调节
 });
-
+const points = new THREE.Points(geometry, material); //点模型对象
