@@ -28,7 +28,7 @@ class InitThree {
     this.renderer = this.initRenderer();
     this.controls = this.initCrols();
     // this.gui = this.initGui()
-    this.initAxesHelper()
+    // this.initAxesHelper()
     this.listentEvent()
     this.appendParent()
     this.render()
@@ -121,7 +121,7 @@ class InitThree {
     const controls = new OrbitControls(this.camera, this.renderer.domElement);
     // 设置控制器阻尼
     controls.enableDamping = true;
-
+    // controls.autoRotate = true;
     return controls
   }
   render() {
