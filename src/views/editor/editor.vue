@@ -50,7 +50,7 @@ function initBackground() {
 
 async function init() {
   try {
-   test()
+   // test()
    initBackground()
   } catch (error) {
     console.log(error)

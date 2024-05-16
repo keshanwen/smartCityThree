@@ -18,9 +18,6 @@ export const useEditorStore = defineStore('editor', () => {
 // 3 维大屏数据
 export const useThreeStore = defineStore('threeStore', () => {
   let config: any = ref({
-    container: undefined,
-    width: 200,
-    height: 200,
     series: []
   })
 

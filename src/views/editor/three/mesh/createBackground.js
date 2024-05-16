@@ -10,6 +10,7 @@ export function cretateBackground() {
     side: THREE.BackSide, //默认前面可见，设置为背面可见即可
   });
   var mesh = new THREE.Mesh(geometry, material);
+  mesh.name = '天空全景图'
   mesh.position.y += 20;
   mesh.rotateY(Math.PI);
 
@@ -34,6 +35,7 @@ export function plane() {
     side: THREE.DoubleSide,
   });
   var mesh = new THREE.Mesh(geometry, material);
+  mesh.name = '地板'
   mesh.position.y = 1
   mesh.rotateX(-Math.PI / 2);
   return {
