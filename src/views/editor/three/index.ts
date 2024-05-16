@@ -86,6 +86,8 @@ class InitThree {
     const renderer = new THREE.WebGLRenderer({
       // 抗锯齿
       antialias: true,
+      // 设置对数深度缓冲区，优化深度冲突问题
+      // logarithmicDepthBuffer: true,
       // logarithmicDepthBuffer: true,
     });
     // 设置渲染尺寸大小

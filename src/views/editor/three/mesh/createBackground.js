@@ -24,7 +24,7 @@ export function cretateBackground() {
 
 export function plane() {
   // var gridHelper = new THREE.GridHelper(1000, 80, 0x003333, 0x003333);
-  var gridHelper = new THREE.GridHelper(1000, 80, '#1111D4', '#1111D4');
+  var gridHelper = new THREE.GridHelper(1000, 80, '#60A6F0', '#60A6F0');
   var geometry = new THREE.PlaneGeometry(1001, 1001);
   var material = new THREE.MeshBasicMaterial({
     // map: texture,
@@ -36,7 +36,7 @@ export function plane() {
   });
   var mesh = new THREE.Mesh(geometry, material);
   mesh.name = '地板'
-  mesh.position.y = 1
+ mesh.position.y = 0.1
   mesh.rotateX(-Math.PI / 2);
   return {
     gridHelper,
