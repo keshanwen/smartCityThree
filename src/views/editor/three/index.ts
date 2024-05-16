@@ -1,7 +1,9 @@
+import { ref,reactive } from 'vue'
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import * as dat from 'dat.gui';
 import { getContainerWH } from '@/views/editor/three/util';
+import { emitControlChange } from '@/views/editor/three/eventListen';
 
 interface SeriesItem {
   name: string
@@ -23,6 +25,7 @@ class InitThree {
   controls: any;
   constructor(config: Config) {
     this.config = config;
+    /* 在写项目时每一个功能应该是一个类 */
     this.scene = this.initScene();
     this.camera = this.initCamera();
     this.renderer = this.initRenderer();
@@ -33,6 +36,14 @@ class InitThree {
     this.appendParent()
     this.render()
     this.initLight()
+    this.confirmViewParams()
+  }
+  // 写项目时不应该将此方法挂载在此类中,将此方法抽取到工具类中
+  confirmViewParams() {
+    emitControlChange({
+      position: this.camera.position,
+      target: this.controls.target,
+    });
   }
   initScene() {
     // 初始化场景
@@ -49,7 +60,7 @@ class InitThree {
     );
     // 设置相机位置
     // camera.position.set(5, 10, 15);
-     camera.position.set(50, 100, 150);
+    camera.position.set(50, 100, 150);
 
     return camera;
   }
@@ -122,7 +133,12 @@ class InitThree {
     // 设置控制器阻尼
     controls.enableDamping = true;
     // controls.autoRotate = true;
-    return controls
+
+    controls.addEventListener('change', () => {
+      this.confirmViewParams();
+    }); //监听鼠标、键盘事件
+
+    return controls;
   }
   render() {
     const clock = new THREE.Clock();

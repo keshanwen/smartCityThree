@@ -1,11 +1,13 @@
 <template>
     <div class='editor-home'>
-    <div ref="containerRef" class="left">
-
-    </div>
-    <div class="right">
-      <rightAttribute/>
-    </div>
+      <!-- 3D 场景 -->
+      <div ref="containerRef" class="left"></div>
+      <!-- 右边属性 -->
+      <div class="right">
+        <rightAttribute/>
+      </div>
+      <!-- 视角 -->
+      <viewParams/>
     </div>
 </template>
 <script setup lang='ts'>
@@ -16,6 +18,7 @@ import { getContainerWH } from '@/views/editor/three/util'
 import InitThree from '@/views/editor/three/index'
 import { cretateBackground, plane } from '@/views/editor/three/mesh/createBackground.js'
 import rightAttribute from '@/views/editor/components/rightAttribute/index.vue'
+import viewParams from '@/views/editor/components/rightAttribute/viewParams.vue';
 
 
 let containerRef = ref()
@@ -82,6 +85,7 @@ onMounted(() => {
 <style scoped lang="less">
 .editor-home {
   display: flex;
+  position: relative;
   height: 100vh;
   .left {
     flex: 1;

@@ -1,6 +1,5 @@
 
-
-export function getContainerWH(dom:HTMLElement) {
+export function getContainerWH(dom: HTMLElement) {
   const { width, height } = dom.getBoundingClientRect();
 
   return {
