@@ -25,7 +25,7 @@ let containerRef = ref()
 const threeStore = useThreeStore()
 
 let app: InitThree = new InitThree()  // 初始化 three 实例
-provide('app', app) // 将 app 实例传递下去
+provide('app', app as InitThree) // 将 app 实例传递下去
 
 
 

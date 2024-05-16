@@ -1,6 +1,8 @@
 import { ref,reactive } from 'vue'
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
+import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
+import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js';
 import * as dat from 'dat.gui';
 import { getContainerWH } from '@/views/editor/three/util';
 import { emitControlChange } from '@/views/editor/three/eventListen';
@@ -22,8 +24,9 @@ class InitThree {
   renderer: THREE.WebGLRenderer;
   gui: any;
   controls: any;
+  GLTFLoader: GLTFLoader;
   constructor(config?: Partial<Config>) {
-    this.config = this.initConfig(config = {});
+    this.config = this.initConfig((config = {}));
     /* 在写项目时每一个功能应该是一个类 */
     this.scene = this.initScene();
     this.camera = this.initCamera();
@@ -31,17 +34,26 @@ class InitThree {
     this.controls = this.initCrols();
     // this.gui = this.initGui()
     // this.initAxesHelper()
+    this.GLTFLoader = this.initGLTFLoader();
     this.render();
     this.initLight();
     this.confirmViewParams();
   }
-  initConfig(config: Partial<Config>):Config {
+  private initGLTFLoader(): GLTFLoader {
+    // gltf加载
+    const draco = new DRACOLoader();
+    draco.setDecoderPath('http://localhost:1949/draco/');
+    const loader: GLTFLoader = new GLTFLoader();
+    loader.setDRACOLoader(draco);
 
+    return loader;
+  }
+  initConfig(config: Partial<Config>): Config {
     return {
       series: config?.series || [],
       width: config?.width || 100,
-      height: config?.height || 100
-    }
+      height: config?.height || 100,
+    };
   }
   // 写项目时不应该将此方法挂载在此类中,将此方法抽取到工具类中
   confirmViewParams() {
@@ -146,7 +158,7 @@ class InitThree {
     this.renderer.render(this.scene, this.camera);
   }
   appendParent(parentDOM: HTMLElement) {
-    this.resize(parentDOM)
+    this.resize(parentDOM);
     parentDOM.appendChild(this.renderer.domElement);
   }
 }
