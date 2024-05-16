@@ -14,6 +14,7 @@
 <script setup lang="ts">
 import { ref, inject } from 'vue';
 import InitThree from '@/views/editor/three/index'
+import { handleModelName } from '@/views/editor/components/rightAttribute/model/handleModel'
 
 const app = inject('app') as InitThree
 const value = ref('');
@@ -54,8 +55,9 @@ const options = [
 
 const selectModel = (url: string) => {
   app.GLTFLoader.load(url, (gltf) => {
-    console.log(gltf, 'gltf~~~~~~~~')
+    console.log(gltf)
     app.scene.add(gltf.scene)
+    handleModelName(gltf.scene)
   })
 }
 
