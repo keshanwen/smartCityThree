@@ -10,7 +10,6 @@ interface SeriesItem {
 }
 
 interface Config {
-  container: HTMLElement;
   width: number;
   height: number;
   series: SeriesItem[]
@@ -23,8 +22,8 @@ class InitThree {
   renderer: THREE.WebGLRenderer;
   gui: any;
   controls: any;
-  constructor(config: Config) {
-    this.config = config;
+  constructor(config?: Partial<Config>) {
+    this.config = this.initConfig(config = {});
     /* 在写项目时每一个功能应该是一个类 */
     this.scene = this.initScene();
     this.camera = this.initCamera();
@@ -32,11 +31,17 @@ class InitThree {
     this.controls = this.initCrols();
     // this.gui = this.initGui()
     // this.initAxesHelper()
-    this.listentEvent()
-    this.appendParent()
-    this.render()
-    this.initLight()
-    this.confirmViewParams()
+    this.render();
+    this.initLight();
+    this.confirmViewParams();
+  }
+  initConfig(config: Partial<Config>):Config {
+
+    return {
+      series: config?.series || [],
+      width: config?.width || 100,
+      height: config?.height || 100
+    }
   }
   // 写项目时不应该将此方法挂载在此类中,将此方法抽取到工具类中
   confirmViewParams() {
@@ -75,7 +80,7 @@ class InitThree {
     renderer.setSize(this.config.width, this.config.height);
     renderer.shadowMap.enabled = true;
 
-    return renderer
+    return renderer;
   }
   initLight() {
     /**
@@ -97,30 +102,22 @@ class InitThree {
     //创建gui对象
     const gui = new dat.GUI();
 
-    return gui
+    return gui;
   }
-  listentEvent() {
+  resize(parentDOM: HTMLElement) {
+    const { width, height } = getContainerWH(parentDOM);
+    this.config.width = width;
+    this.config.height = height;
+
     // 更新摄像头
     this.camera.aspect = this.config.width / this.config.height;
     //   更新摄像机的投影矩阵
     this.camera.updateProjectionMatrix();
 
-    // 监听屏幕大小改变的变化，设置渲染的尺寸
-    window.addEventListener('resize', () => {
-      const { width, height } = getContainerWH(this.config.container);
-      this.config.width = width;
-      this.config.height = height;
-      console.log('resize');
-      // 更新摄像头
-      this.camera.aspect = this.config.width / this.config.height;
-      //   更新摄像机的投影矩阵
-      this.camera.updateProjectionMatrix();
-
-      //   更新渲染器
-      this.renderer.setSize(this.config.width, this.config.height);
-      //   设置渲染器的像素比例
-      this.renderer.setPixelRatio(window.devicePixelRatio);
-    });
+    //   更新渲染器
+    this.renderer.setSize(this.config.width, this.config.height);
+    //   设置渲染器的像素比例
+    this.renderer.setPixelRatio(window.devicePixelRatio);
   }
   initAxesHelper() {
     // 加入辅助轴，帮助我们查看3维坐标轴
@@ -148,8 +145,9 @@ class InitThree {
     // 使用渲染器渲染相机看这个场景的内容渲染出来
     this.renderer.render(this.scene, this.camera);
   }
-  appendParent() {
-    this.config.container.appendChild(this.renderer.domElement)
+  appendParent(parentDOM: HTMLElement) {
+    this.resize(parentDOM)
+    parentDOM.appendChild(this.renderer.domElement);
   }
 }
 

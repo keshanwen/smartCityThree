@@ -11,7 +11,7 @@
     </div>
 </template>
 <script setup lang='ts'>
-import { ref, nextTick, onMounted } from 'vue'
+import { ref, nextTick, onMounted, provide  } from 'vue'
 import * as THREE from 'three';
 import { useThreeStore } from '@/stores/editor'
 import { getContainerWH } from '@/views/editor/three/util'
@@ -24,18 +24,10 @@ import viewParams from '@/views/editor/components/rightAttribute/viewParams.vue'
 let containerRef = ref()
 const threeStore = useThreeStore()
 
-let app: InitThree  // three 实例
+let app: InitThree = new InitThree()  // 初始化 three 实例
+provide('app', app) // 将 app 实例传递下去
 
-async function initConfig() {
-  try {
-    await nextTick()
-    const { width, height } = getContainerWH(containerRef.value)
-    threeStore.changeConfig('width', width)
-    threeStore.changeConfig('height',height)
-  } catch (error) {
-    console.log(error)
-  }
-}
+
 
 function test() {
     const geometry = new THREE.BoxGeometry(40, 40, 40)
@@ -58,15 +50,6 @@ function initBackground() {
 
 async function init() {
   try {
-    await initConfig()
-    // 初始化 three 实例
-    app = new InitThree({
-      container: containerRef.value,
-      width: threeStore.config.width,
-      height: threeStore.config.height,
-      series: [],
-    })
-
    test()
    initBackground()
   } catch (error) {
@@ -75,8 +58,9 @@ async function init() {
 }
 init()
 
-onMounted(() => {
 
+onMounted(() => {
+  app.appendParent(containerRef.value)
 })
 
 </script>
