@@ -40,13 +40,29 @@ const options = [
     value: 'http://localhost:1949/models/总控室.glb',
     label: '总控室',
   },
+    {
+    value: 'http://localhost:1949/models/科技_工业建筑_001.glb',
+    label: '科技_工业建筑_001',
+  },
   {
+    value: 'http://localhost:1949/models/科技_工业建筑_002.glb',
+    label: '科技_工业建筑_002',
+  },
+    {
     value: 'http://localhost:1949/models/科技_工业建筑_003.glb',
     label: '科技_工业建筑_003',
   },
   {
     value: 'http://localhost:1949/models/科技_工业建筑_004.glb',
     label: '科技_工业建筑_004',
+  },
+  {
+    value: 'http://localhost:1949/models/科技_工业建筑_005.glb',
+    label: '科技_工业建筑_005',
+  },
+  {
+    value: 'http://localhost:1949/models/科技_工业建筑_006.glb',
+    label: '科技_工业建筑_006',
   },
 ];
 
