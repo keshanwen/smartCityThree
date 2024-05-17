@@ -9,15 +9,83 @@
         :value="item.value"
       />
     </el-select>
+    <div class="model-wrap">
+      <div v-for="item in threeStore.config.series" :class="[ threeStore?.activeModel?.url === item.url ? 'active-item' : '', 'series-item']">
+        <div @click="() => clickModel(item)">{{ item.modelMessage.name }}</div>
+        <div>
+          <span class="opeator show">显示</span>
+          <span class="opeator delete">删除</span>
+        </div>
+      </div>
+    </div>
+    <!-- 模型信息 -->
+    <div v-if="threeStore.activeModel" class="model-message">
+      <div>
+        <span> 名称 </span>
+         <el-input
+        v-model="threeStore.activeModel.modelMessage.name"
+        style="width: 240px"
+        disabled
+        placeholder="Please input"
+      />
+      </div>
+      <div>
+        <span>缩放</span>
+        <div>
+          <span>x</span>
+          <el-input-number v-model="threeStore.activeModel.modelMessage.scale.x" :step="0.01"/>
+        </div>
+        <div>
+          <span>y</span>
+           <el-input-number v-model="threeStore.activeModel.modelMessage.scale.x" :step="0.01"/>
+        </div>
+        <div>
+          <span>z</span>
+          <el-input-number v-model="threeStore.activeModel.modelMessage.scale.x" :step="0.01"/>
+        </div>
+      </div>
+        <div>
+        <span>位置</span>
+         <div>
+          <span>x</span>
+          <el-input-number v-model="threeStore.activeModel.modelMessage.position.x" :step="1"/>
+        </div>
+        <div>
+          <span>y</span>
+           <el-input-number v-model="threeStore.activeModel.modelMessage.position.x" :step="1"/>
+        </div>
+        <div>
+          <span>z</span>
+          <el-input-number v-model="threeStore.activeModel.modelMessage.position.x" :step="1"/>
+        </div>
+      </div>
+      <div>
+        <span>旋转</span>
+         <div>
+          <span>x</span>
+          <el-input-number v-model="threeStore.activeModel.modelMessage.rotation.x" :step="0.1"/>
+        </div>
+        <div>
+          <span>y</span>
+           <el-input-number v-model="threeStore.activeModel.modelMessage.rotation.x" :step="0.1"/>
+        </div>
+        <div>
+          <span>z</span>
+          <el-input-number v-model="threeStore.activeModel.modelMessage.rotation.x" :step="0.1"/>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 <script setup lang="ts">
 import { ref, inject } from 'vue';
 import InitThree from '@/views/editor/three/index'
-import { handleModelName } from '@/views/editor/components/rightAttribute/model/handleModel'
+import { useThreeStore } from '@/stores/editor'
+import { assemblyData } from '@/views/editor/components/rightAttribute/model/handleModel'
 
 const app = inject('app') as InitThree
 const value = ref('');
+const threeStore = useThreeStore()
 
 const options = [
    {
@@ -71,10 +139,14 @@ const options = [
 
 const selectModel = (url: string) => {
   app.GLTFLoader.load(url, (gltf) => {
-    console.log(gltf)
     app.scene.add(gltf.scene)
-    handleModelName(gltf.scene)
+    const model = assemblyData(gltf.scene, url)
+    threeStore.pushSeries(model)
   })
+}
+
+const clickModel = (item: any) => {
+  threeStore.activeModel = item
 }
 
 
@@ -84,5 +156,37 @@ const selectModel = (url: string) => {
 <style lang="scss" scoped>
 .home {
   border: 1px solid red;
+
+  .model-wrap {
+    border: 1px solid #CDD0D6;
+    margin: 6px;
+    min-height: 200px;
+
+    .series-item {
+      display: flex;
+      justify-content: space-between;
+      cursor: pointer;
+      padding-left: 6px;
+      height: 30px;
+      line-height: 30px;
+    }
+    .active-item {
+      background-color: aquamarine;
+    }
+    .opeator {
+      font-size: 12px;
+      padding-right: 6px
+    }
+    .show {
+      color: green;
+    }
+    .delete {
+      color: red;
+    }
+  }
+
+  .model-message {
+
+  }
 }
 </style>

@@ -79,6 +79,7 @@ onMounted(() => {
     width: 300px;
     height: 100%;
     border-left: 1px solid red;
+    overflow: scroll;
   }
 }
 </style>

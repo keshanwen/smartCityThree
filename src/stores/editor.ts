@@ -18,15 +18,30 @@ export const useEditorStore = defineStore('editor', () => {
 // 3 维大屏数据
 export const useThreeStore = defineStore('threeStore', () => {
   let config: any = ref({
-    series: []
+    series: [] // 各个模型数据
   })
+
+  let activeModel: any = ref(undefined) // 当前激活的模型
 
   const changeConfig = (key: string,value: any) => {
     config.value[key] = value
   }
 
+  const pushSeries = (obj: any) => {
+    config.value.series.push(obj)
+  }
+
+  const deleteSeries = (url: string) => {
+    config.value.series = config.value.series.filter((item: any) => {
+      return item.url !== url
+    })
+  }
+
   return {
     config,
+    activeModel,
     changeConfig,
+    pushSeries,
+    deleteSeries,
   };
 });
