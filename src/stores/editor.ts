@@ -31,10 +31,15 @@ export const useThreeStore = defineStore('threeStore', () => {
     config.value.series.push(obj)
   }
 
-  const deleteSeries = (url: string) => {
+  const deleteSeries = (uuid: string) => {
     config.value.series = config.value.series.filter((item: any) => {
-      return item.url !== url
+      return item.uuid !== uuid
     })
+  }
+
+
+  const resetActiveModel = () => {
+    activeModel.value = undefined
   }
 
   return {
@@ -43,5 +48,6 @@ export const useThreeStore = defineStore('threeStore', () => {
     changeConfig,
     pushSeries,
     deleteSeries,
+    resetActiveModel,
   };
 });

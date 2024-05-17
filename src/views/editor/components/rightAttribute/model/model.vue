@@ -10,11 +10,11 @@
       />
     </el-select>
     <div class="model-wrap">
-      <div v-for="item in threeStore.config.series" :class="[ threeStore?.activeModel?.url === item.url ? 'active-item' : '', 'series-item']">
+      <div v-for="item in threeStore.config.series" :key="item.uuid" :class="[ threeStore?.activeModel?.url === item.url ? 'active-item' : '', 'series-item']">
         <div @click="() => clickModel(item)">{{ item.modelMessage.name }}</div>
         <div>
-          <span class="opeator show">显示</span>
-          <span class="opeator delete">删除</span>
+          <span class="opeator show" @click="() => showModel(item)">{{ item.visible ? '隐藏' : '显示' }}</span>
+          <span class="opeator delete" @click="() => deleteModel(item)">删除</span>
         </div>
       </div>
     </div>
@@ -147,6 +147,41 @@ const selectModel = (url: string) => {
 
 const clickModel = (item: any) => {
   threeStore.activeModel = item
+}
+
+const showModel = (item: any) => {
+  const name = item.modelMessage.name
+  const mesh = app.scene.getObjectByName(name)
+  item.visible =  mesh!.visible = !mesh!.visible
+}
+
+const deleteModel = (item: any) => {
+  const name = item.modelMessage.name
+  const uuid = item.uuid
+  const mesh = app.scene.getObjectByName(name)
+  let deleteMesh: any = mesh?.parent || mesh
+  // 从场景中移除数据不再渲染 不在占用渲染 gltf.scene 需要的 GPU 资源占用
+  app.scene.remove(deleteMesh)
+  // 执行 remove() 后， 注意执行 geometry.dispose() 释放顶点数据占用的GPU 内存（显存）
+  // 递归遍历批量释放所有Mesh的几何体和材质占用的GPU内存(显存)
+  deleteMesh.traverse((obj: any) => {
+    if (obj?.geometry?.dispose) {
+      obj.geometry.dispose()
+    }
+    if (obj?.material?.dispose) {
+      obj.material.dispose()
+    }
+    if (obj?.dispose) {
+      obj.dispose()
+    }
+  })
+  deleteMesh = null
+
+  threeStore.deleteSeries(uuid)
+
+  if (threeStore?.activeModel?.uuid === uuid) {
+    threeStore.resetActiveModel()
+  }
 }
 
 

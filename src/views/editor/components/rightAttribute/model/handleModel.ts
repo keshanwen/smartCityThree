@@ -1,5 +1,7 @@
 import { useThreeStore } from '@/stores/editor';
 import * as THREE from 'three';
+import { v4 as uuidv4 } from 'uuid';
+// uuidv4(); // ⇨ '9b1deb4d-3b7d-4bad-9bdd-2b0d7b3dcb6d'
 
 
 const threeStore = useThreeStore();
@@ -43,7 +45,11 @@ export function assemblyData(mesh: THREE.Object3D, url: string) {
   let modelMessage = handleModelName(mesh);
 
   return {
+    uuid: uuidv4(),
+    visible: true,
     url,
-    modelMessage
-  }
+    modelMessage,
+
+  };
 }
+
