@@ -37,6 +37,10 @@ export const useThreeStore = defineStore('threeStore', () => {
     })
   }
 
+  const confirmActiveModel = (item: any) => {
+    activeModel.value = item
+  }
+
 
   const resetActiveModel = () => {
     activeModel.value = undefined
@@ -48,6 +52,7 @@ export const useThreeStore = defineStore('threeStore', () => {
     changeConfig,
     pushSeries,
     deleteSeries,
+    confirmActiveModel,
     resetActiveModel,
   };
 });

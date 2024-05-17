@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <p>step: 1 选择模型</p>
+    <p>载入模型</p>
     <el-select v-model="value" placeholder="Select" style="width: 240px" @change="selectModel">
       <el-option
         v-for="item in options"
@@ -33,45 +33,45 @@
         <span>缩放</span>
         <div>
           <span>x</span>
-          <el-input-number v-model="threeStore.activeModel.modelMessage.scale.x" :step="0.01"/>
+          <el-input-number v-model="threeStore.activeModel.modelMessage.scale.x" :step="0.1" @change="(e) => { attributeChange('scale','x',e) }"/>
         </div>
         <div>
           <span>y</span>
-           <el-input-number v-model="threeStore.activeModel.modelMessage.scale.x" :step="0.01"/>
+           <el-input-number v-model="threeStore.activeModel.modelMessage.scale.y" :step="0.1" @change="(e) => { attributeChange('scale','y',e) }"/>
         </div>
         <div>
           <span>z</span>
-          <el-input-number v-model="threeStore.activeModel.modelMessage.scale.x" :step="0.01"/>
+          <el-input-number v-model="threeStore.activeModel.modelMessage.scale.z" :step="0.1" @change="(e) => { attributeChange('scale','z',e) }"/>
         </div>
       </div>
         <div>
         <span>位置</span>
          <div>
           <span>x</span>
-          <el-input-number v-model="threeStore.activeModel.modelMessage.position.x" :step="1"/>
+          <el-input-number v-model="threeStore.activeModel.modelMessage.position.x" :step="1" @change="(e) => { attributeChange('position','x',e) }"/>
         </div>
         <div>
           <span>y</span>
-           <el-input-number v-model="threeStore.activeModel.modelMessage.position.x" :step="1"/>
+           <el-input-number v-model="threeStore.activeModel.modelMessage.position.y" :step="1" @change="(e) => { attributeChange('position','y',e) }"/>
         </div>
         <div>
           <span>z</span>
-          <el-input-number v-model="threeStore.activeModel.modelMessage.position.x" :step="1"/>
+          <el-input-number v-model="threeStore.activeModel.modelMessage.position.z" :step="1" @change="(e) => { attributeChange('position','z',e) }"/>
         </div>
       </div>
       <div>
         <span>旋转</span>
          <div>
           <span>x</span>
-          <el-input-number v-model="threeStore.activeModel.modelMessage.rotation.x" :step="0.1"/>
+          <el-input-number v-model="threeStore.activeModel.modelMessage.rotation.x" :step="1" @change="(e) => { attributeChange('rotation','x',e) }"/>
         </div>
         <div>
           <span>y</span>
-           <el-input-number v-model="threeStore.activeModel.modelMessage.rotation.x" :step="0.1"/>
+           <el-input-number v-model="threeStore.activeModel.modelMessage.rotation.y" :step="1" @change="(e) => { attributeChange('rotation','y',e) }"/>
         </div>
         <div>
           <span>z</span>
-          <el-input-number v-model="threeStore.activeModel.modelMessage.rotation.x" :step="0.1"/>
+          <el-input-number v-model="threeStore.activeModel.modelMessage.rotation.z" :step="1" @change="(e) => { attributeChange('rotation','z',e) }"/>
         </div>
       </div>
     </div>
@@ -79,6 +79,7 @@
 </template>
 <script setup lang="ts">
 import { ref, inject } from 'vue';
+import * as THREE from 'three';
 import InitThree from '@/views/editor/three/index'
 import { useThreeStore } from '@/stores/editor'
 import { assemblyData } from '@/views/editor/components/rightAttribute/model/handleModel'
@@ -146,7 +147,7 @@ const selectModel = (url: string) => {
 }
 
 const clickModel = (item: any) => {
-  threeStore.activeModel = item
+ threeStore.confirmActiveModel(item)
 }
 
 const showModel = (item: any) => {
@@ -182,6 +183,17 @@ const deleteModel = (item: any) => {
   if (threeStore?.activeModel?.uuid === uuid) {
     threeStore.resetActiveModel()
   }
+}
+
+const attributeChange = (attributeName: string,key: string, value: number) => {
+  const name = threeStore.activeModel.modelMessage.name
+  const mesh: any = app.scene.getObjectByName(name)
+
+  if (attributeName === 'rotation') {
+    value = THREE.MathUtils.degToRad(value)
+  }
+
+  mesh[attributeName][key] = value
 }
 
 
