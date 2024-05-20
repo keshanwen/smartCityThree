@@ -1,4 +1,4 @@
-import { ref,reactive } from 'vue'
+import { ref,reactive, nextTick } from 'vue'
 import * as THREE from 'three';
 import { OrbitControls } from 'three/examples/jsm/controls/OrbitControls';
 import { GLTFLoader } from 'three/examples/jsm/loaders/GLTFLoader.js';
@@ -37,7 +37,9 @@ class InitThree {
     this.GLTFLoader = this.initGLTFLoader();
     this.render();
     this.initLight();
-    this.confirmViewParams();
+    nextTick(() => {
+      this.confirmViewParams()
+    })
   }
   private initGLTFLoader(): GLTFLoader {
     // gltf加载
