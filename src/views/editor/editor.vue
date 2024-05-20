@@ -1,7 +1,14 @@
 <template>
     <div class='editor-home'>
       <!-- 3D 场景 -->
-      <div ref="containerRef" class="left"></div>
+      <div class="left">
+        <div class="opeator">
+          <div class="back">
+            < 返回可视化看板
+          </div>
+        </div>
+        <div ref="containerRef" class="container"></div>
+      </div>
       <!-- 右边属性 -->
       <div class="right">
         <rightAttribute/>
@@ -74,6 +81,19 @@ onMounted(() => {
   .left {
     flex: 1;
     height: 100%;
+    .opeator {
+      display: flex;
+      height: 36px;
+      line-height: 36px;
+      padding-left: 20px;
+      font-size: 12px;
+      .back {
+       cursor: pointer;
+      }
+    }
+    .container {
+      height: calc( 100% - 36px );
+    }
   }
   .right {
     width: 300px;

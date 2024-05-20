@@ -49,7 +49,7 @@ onMounted(() => {
 <style lang='less' scoped>
 .view-params-home {
   position: absolute;
-  top: 10px;
+  top: 50px;
   right: 320px;
   width: 150px;
   border-radius: 5px;
