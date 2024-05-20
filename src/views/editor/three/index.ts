@@ -75,9 +75,10 @@ class InitThree {
       1,
       50000
     );
-    // 设置相机位置
+    // 设置相机位置  -183.05,29.03,25.47
     // camera.position.set(5, 10, 15);
-    camera.position.set(50, 100, 150);
+    // camera.position.set(50, 100, 150);
+    camera.position.set(-183.05, 29.03, 25.47);
 
     return camera;
   }
