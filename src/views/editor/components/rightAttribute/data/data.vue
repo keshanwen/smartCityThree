@@ -67,6 +67,9 @@ import InitThree from '@/views/editor/three/index'
 import { Plus } from '@element-plus/icons-vue';
 // 引入CSS2模型对象CSS2DObject
 import { CSS2DObject } from 'three/addons/renderers/CSS2DRenderer.js';
+// 引入CSS3模型对象CSS3DObject
+import { CSS3DObject } from 'three/addons/renderers/CSS3DRenderer.js';
+
 
 const eventOptions = [
   {
@@ -143,13 +146,13 @@ function demo() {
   const divTag:HTMLElement = document.createElement('div');
   divTag.innerText = 'hello wrold'
   // HTML元素转化为threejs的CSS2模型对象
-  const tag = new CSS2DObject(divTag);
+  const tag = new CSS3DObject(divTag);
   tag.position.set(0, 0, 0);
 
-  const group = new THREE.Group()
-  group.position.set(-200, 0, 0)
-  group.add(tag)
-  app.scene.add(group)
+  // const group = new THREE.Group()
+  // group.position.set(-100, 0, 0)
+  // group.add(tag)
+  app.scene.add(tag)
 }
 
 onMounted(() => {

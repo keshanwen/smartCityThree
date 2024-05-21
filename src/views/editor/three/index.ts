@@ -8,6 +8,9 @@ import { getContainerWH } from '@/views/editor/three/util';
 import { emitControlChange } from '@/views/editor/three/eventListen';
 // 引入CSS2渲染器CSS2DRenderer
 import { CSS2DRenderer } from 'three/addons/renderers/CSS2DRenderer.js';
+// 引入CSS3渲染器CSS3DRenderer
+import {CSS3DRenderer} from 'three/addons/renderers/CSS3DRenderer.js';
+
 
 
 
@@ -29,14 +32,16 @@ class InitThree {
   gui: any;
   controls: any;
   GLTFLoader: GLTFLoader;
-  css2Renderer: CSS2DRenderer;
+  css2Renderer?: CSS2DRenderer;
+  css3DRenderer: CSS3DRenderer;
   constructor(config?: Partial<Config>) {
     this.config = this.initConfig((config = {}));
     /* 在写项目时每一个功能应该是一个类 */
     this.scene = this.initScene();
     this.camera = this.initCamera();
     this.renderer = this.initRenderer();
-    this.css2Renderer = this.initcss2Renderer();
+    // this.css2Renderer = this.initcss2Renderer();
+    this.css3DRenderer = this.initCSS3DRenderer()
     this.controls = this.initCrols();
     // this.gui = this.initGui()
     // this.initAxesHelper()
@@ -114,6 +119,15 @@ class InitThree {
 
     return css2Renderer;
   }
+  initCSS3DRenderer() {
+    // 创建一个CSS2渲染器CSS2DRenderer
+    let css3DRenderer = new CSS3DRenderer();
+    // width, height：canvas画布宽高度
+    css3DRenderer.setSize(this.config.width, this.config.height);
+    css3DRenderer.domElement.style.pointerEvents = 'none';
+
+    return css3DRenderer;
+  }
   initLight() {
     /**
      * 光源设置
@@ -151,7 +165,8 @@ class InitThree {
     //   设置渲染器的像素比例
     this.renderer.setPixelRatio(window.devicePixelRatio);
     // width, height：canvas画布宽高度
-    this.css2Renderer.setSize(this.config.width, this.config.height);
+    // this.css2Renderer.setSize(this.config.width, this.config.height);
+    this.css3DRenderer.setSize(this.config.width, this.config.height);
   }
   initAxesHelper() {
     // 加入辅助轴，帮助我们查看3维坐标轴
@@ -179,15 +194,18 @@ class InitThree {
     // 使用渲染器渲染相机看这个场景的内容渲染出来
     this.renderer.render(this.scene, this.camera);
     // 用法和webgl渲染器渲染方法类似
-    this.css2Renderer.render(this.scene, this.camera);
+    // this.css2Renderer.render(this.scene, this.camera);
+    this.css3DRenderer.render(this.scene, this.camera);
   }
   appendParent(parentDOM: HTMLElement) {
     this.resize(parentDOM);
-    this.css2Renderer.domElement.style.position = 'absolute';
-    this.css2Renderer.domElement.style.top = '0px';
+    // this.css2Renderer.domElement.style.position = 'absolute';
+    // this.css2Renderer.domElement.style.top = '0px';
+      this.css3DRenderer.domElement.style.position = 'absolute';
+      this.css3DRenderer.domElement.style.top = '0px';
 
     parentDOM.appendChild(this.renderer.domElement);
-    parentDOM.appendChild(this.css2Renderer.domElement);
+    parentDOM.appendChild(this.css3DRenderer.domElement);
   }
 }
 
