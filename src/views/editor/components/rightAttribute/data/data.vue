@@ -59,10 +59,14 @@
   </div>
 </template>
 <script setup lang="ts">
-import { ref, reactive, onMounted } from 'vue';
+import { ref, reactive, inject, onMounted } from 'vue';
+import * as THREE from 'three';
 import { v4 as uuidv4 } from 'uuid';
 import { useThreeStore } from '@/stores/editor';
+import InitThree from '@/views/editor/three/index'
 import { Plus } from '@element-plus/icons-vue';
+// 引入CSS2模型对象CSS2DObject
+import { CSS2DObject } from 'three/addons/renderers/CSS2DRenderer.js';
 
 const eventOptions = [
   {
@@ -75,6 +79,7 @@ const eventOptions = [
   // }
 ];
 
+const app = inject('app') as InitThree
 const threeStore = useThreeStore();
 
 let showLayerSet = ref(false);
@@ -133,6 +138,23 @@ const delteLayer = (item: any) => {
   console.log(item, 'item~~~~~')
   threeStore.deleteLayerData(item.uuid)
 }
+
+function demo() {
+  const divTag:HTMLElement = document.createElement('div');
+  divTag.innerText = 'hello wrold'
+  // HTML元素转化为threejs的CSS2模型对象
+  const tag = new CSS2DObject(divTag);
+  tag.position.set(0, 0, 0);
+
+  const group = new THREE.Group()
+  group.position.set(-200, 0, 0)
+  group.add(tag)
+  app.scene.add(group)
+}
+
+onMounted(() => {
+  demo()
+})
 </script>
 
 <style lang="scss" scoped>

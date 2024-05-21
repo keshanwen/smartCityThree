@@ -92,6 +92,7 @@ onMounted(() => {
       }
     }
     .container {
+      position: relative;
       height: calc( 100% - 36px );
     }
   }

@@ -6,6 +6,10 @@ import { DRACOLoader } from 'three/examples/jsm/loaders/DRACOLoader.js';
 import * as dat from 'dat.gui';
 import { getContainerWH } from '@/views/editor/three/util';
 import { emitControlChange } from '@/views/editor/three/eventListen';
+// 引入CSS2渲染器CSS2DRenderer
+import { CSS2DRenderer } from 'three/addons/renderers/CSS2DRenderer.js';
+
+
 
 interface SeriesItem {
   name: string
@@ -25,12 +29,14 @@ class InitThree {
   gui: any;
   controls: any;
   GLTFLoader: GLTFLoader;
+  css2Renderer: CSS2DRenderer;
   constructor(config?: Partial<Config>) {
     this.config = this.initConfig((config = {}));
     /* 在写项目时每一个功能应该是一个类 */
     this.scene = this.initScene();
     this.camera = this.initCamera();
     this.renderer = this.initRenderer();
+    this.css2Renderer = this.initcss2Renderer();
     this.controls = this.initCrols();
     // this.gui = this.initGui()
     // this.initAxesHelper()
@@ -38,8 +44,8 @@ class InitThree {
     this.render();
     this.initLight();
     nextTick(() => {
-      this.confirmViewParams()
-    })
+      this.confirmViewParams();
+    });
   }
   private initGLTFLoader(): GLTFLoader {
     // gltf加载
@@ -99,6 +105,15 @@ class InitThree {
 
     return renderer;
   }
+  initcss2Renderer() {
+    // 创建一个CSS2渲染器CSS2DRenderer
+    let css2Renderer = new CSS2DRenderer();
+    // width, height：canvas画布宽高度
+    css2Renderer.setSize(this.config.width, this.config.height);
+    css2Renderer.domElement.style.pointerEvents = 'none';
+
+    return css2Renderer;
+  }
   initLight() {
     /**
      * 光源设置
@@ -135,6 +150,8 @@ class InitThree {
     this.renderer.setSize(this.config.width, this.config.height);
     //   设置渲染器的像素比例
     this.renderer.setPixelRatio(window.devicePixelRatio);
+    // width, height：canvas画布宽高度
+    this.css2Renderer.setSize(this.config.width, this.config.height);
   }
   initAxesHelper() {
     // 加入辅助轴，帮助我们查看3维坐标轴
@@ -161,10 +178,16 @@ class InitThree {
     requestAnimationFrame(() => this.render());
     // 使用渲染器渲染相机看这个场景的内容渲染出来
     this.renderer.render(this.scene, this.camera);
+    // 用法和webgl渲染器渲染方法类似
+    this.css2Renderer.render(this.scene, this.camera);
   }
   appendParent(parentDOM: HTMLElement) {
     this.resize(parentDOM);
+    this.css2Renderer.domElement.style.position = 'absolute';
+    this.css2Renderer.domElement.style.top = '0px';
+
     parentDOM.appendChild(this.renderer.domElement);
+    parentDOM.appendChild(this.css2Renderer.domElement);
   }
 }
 
