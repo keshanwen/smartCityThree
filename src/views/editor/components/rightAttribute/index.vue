@@ -5,10 +5,10 @@
         <Model/>
       </el-collapse-item>
       <el-collapse-item title="数据" name="2">
-        <Scene/>
+         <Data/>
       </el-collapse-item>
       <el-collapse-item title="场景" name="3">
-        <Data/>
+        <Scene/>
       </el-collapse-item>
     </el-collapse>
   </div>
@@ -20,7 +20,7 @@ import Model from '@/views/editor/components/rightAttribute/model/model.vue'
 import Scene from '@/views/editor/components/rightAttribute/scene/scene.vue'
 import Data from '@/views/editor/components/rightAttribute/data/data.vue'
 
-const activeNames = ref(['1'])
+const activeNames = ref(['1','2'])
 const handleChange = (val: string[]) => {
   console.log(val)
 }

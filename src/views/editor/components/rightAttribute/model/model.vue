@@ -202,7 +202,7 @@ const attributeChange = (attributeName: string,key: string, value: number) => {
 
 <style lang="scss" scoped>
 .home {
-  border: 1px solid red;
+  border: 2px solid red;
 
   .model-wrap {
     border: 1px solid #CDD0D6;

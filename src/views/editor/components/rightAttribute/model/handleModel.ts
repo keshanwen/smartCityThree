@@ -46,10 +46,10 @@ export function assemblyData(mesh: THREE.Object3D, url: string) {
 
   return {
     uuid: uuidv4(),
+    name: modelMessage.name,
     visible: true,
     url,
     modelMessage,
-
   };
 }
 

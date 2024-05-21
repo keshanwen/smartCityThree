@@ -13,13 +13,65 @@ export const useEditorStore = defineStore('editor', () => {
   return { state, pushState };
 });
 
+interface ModelMessage {
+  name: string;
+  scale: {
+    x: number;
+    y: number;
+    z: number;
+  };
+  position: {
+    x: number;
+    y: number;
+    z: number;
+  };
+  rotation: {
+    x: number;
+    y: number;
+    z: number;
+  };
+}
+
+interface SeriesItem {
+  uuid: string;
+  name: string;
+  visible: boolean;
+  url: string;
+  modelMessage: ModelMessage;
+}
+
+interface ModelContentItem {
+  text: string
+}
+
+interface EventItem {
+  uuid: string
+  eventName: string
+  open: boolean
+}
+
+
+
+interface LayerDataItem {
+  uuid: string;
+  layerName: string;
+  modelName: string;
+  modelContent: ModelContentItem[];
+  event: EventItem[]
+}
+
+interface Config {
+  series: SeriesItem[];
+  layerData: LayerDataItem[]
+}
 
 
 // 3 维大屏数据
 export const useThreeStore = defineStore('threeStore', () => {
-  let config: any = ref({
-    series: [] // 各个模型数据
-  })
+  let config = ref<Config>({
+    series: [], // 各个模型数据
+    layerData: [], // 数据图层信息
+  });
 
   let activeModel: any = ref(undefined) // 当前激活的模型
 
@@ -46,6 +98,16 @@ export const useThreeStore = defineStore('threeStore', () => {
     activeModel.value = undefined
   }
 
+  const pushLayerData = (obj: any) => {
+    config.value.layerData.push(obj)
+  }
+
+  const deleteLayerData = (uuid: string) => {
+     config.value.layerData = config.value.layerData.filter((item: any) => {
+       return item.uuid !== uuid;
+     });
+  }
+
   return {
     config,
     activeModel,
@@ -54,5 +116,7 @@ export const useThreeStore = defineStore('threeStore', () => {
     deleteSeries,
     confirmActiveModel,
     resetActiveModel,
+    pushLayerData,
+    deleteLayerData,
   };
 });
