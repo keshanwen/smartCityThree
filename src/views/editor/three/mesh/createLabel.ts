@@ -26,7 +26,7 @@ export function creatShowTag(
     // 创建 html 元素
     const div = document.createElement('div');
     let text = content.reduce((acc, cur) => {
-      return acc + cur.text + '\n';
+      return acc + cur.text + '<br/>';
     }, '');
 
     div.innerHTML = `${text}`;
