@@ -69,6 +69,7 @@ import { Plus } from '@element-plus/icons-vue';
 import { CSS2DObject } from 'three/addons/renderers/CSS2DRenderer.js';
 // 引入CSS3模型对象CSS3DObject
 import { CSS3DObject } from 'three/addons/renderers/CSS3DRenderer.js';
+import { creatShowTag, deleteMesh } from '@/views/editor/three/mesh/createLabel'
 
 
 const eventOptions = [
@@ -134,29 +135,22 @@ const selectEvent = (value: any, item: any) => {
 };
 
 const eventOpenChange = (e: any, jtem: any, item: any) => {
-  console.log(e, jtem, item);
+  const { modelName,layerName,modelContent } = item
+  if (e) {
+    creatShowTag(app, modelName, layerName, modelContent)
+  } else {
+    deleteMesh(app, modelName, layerName)
+  }
 };
 
 const delteLayer = (item: any) => {
-  console.log(item, 'item~~~~~')
+  const { modelName, layerName } = item
+  deleteMesh(app, modelName, layerName)
   threeStore.deleteLayerData(item.uuid)
 }
 
-function demo() {
-  const divTag:HTMLElement = document.createElement('div');
-  divTag.innerText = 'hello wrold'
-  // HTML元素转化为threejs的CSS2模型对象
-  const tag = new CSS3DObject(divTag);
-  tag.position.set(0, 0, 0);
-
-  // const group = new THREE.Group()
-  // group.position.set(-100, 0, 0)
-  // group.add(tag)
-  app.scene.add(tag)
-}
-
 onMounted(() => {
-  demo()
+
 })
 </script>
 
