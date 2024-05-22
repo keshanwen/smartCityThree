@@ -89,26 +89,30 @@ const value = ref('');
 const threeStore = useThreeStore()
 
 const options = [
-   {
-    value: 'http://localhost:1949/models/仓库.glb',
-    label: '仓库',
-  },
-  {
-    value: 'http://localhost:1949/models/车间.glb',
-    label: '车间',
-  },
-   {
-    value: 'http://localhost:1949/models/房子.glb',
-    label: '房子',
-  },
-  {
-    value: 'http://localhost:1949/models/综合仓库.glb',
-    label: '综合仓库',
-  },
-   {
-    value: 'http://localhost:1949/models/总控室.glb',
-    label: '总控室',
-  },
+  //  {
+  //   value: 'http://localhost:1949/models/仓库.glb',
+  //   label: '仓库',
+  // },
+  // {
+  //   value: 'http://localhost:1949/models/车间.glb',
+  //   label: '车间',
+  // },
+  //  {
+  //   value: 'http://localhost:1949/models/房子.glb',
+  //   label: '房子',
+  // },
+  // {
+  //   value: 'http://localhost:1949/models/综合仓库.glb',
+  //   label: '综合仓库',
+  // },
+  //  {
+  //   value: 'http://localhost:1949/models/总控室.glb',
+  //   label: '总控室',
+  // },
+    {
+      value: 'http://localhost:1949/models/厂房_005.glb',
+      label: '厂房_005',
+    },
     {
     value: 'http://localhost:1949/models/科技_工业建筑_001.glb',
     label: '科技_工业建筑_001',
