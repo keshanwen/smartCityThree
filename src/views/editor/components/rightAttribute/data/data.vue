@@ -132,6 +132,7 @@ const selectEvent = (value: any, item: any) => {
     open: false,
   };
   item.event.push(obj);
+  templateClick.value = '';
 };
 
 const eventOpenChange = (e: any, jtem: any, item: any) => {
