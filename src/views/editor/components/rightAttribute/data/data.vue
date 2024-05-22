@@ -44,13 +44,52 @@
               />
             </el-select>
           </div>
-          <div v-for="jtem in item.event" class="event-item">
-            <div>{{ jtem.eventName }}</div>
-            <div>
-              <el-switch
-                v-model="jtem.open"
-                @change="(e) => eventOpenChange(e, jtem, item)"
+          <div v-for="jtem in item.event"  @click="(e) => eventClickConfig(jtem, item)">
+            <div class="event-item">
+               <div>{{ jtem.eventName }}</div>
+                <div>
+                  <el-switch
+                    v-model="jtem.open"
+                    @change="(e) => eventOpenChange(e, jtem, item)"
+                  />
+                </div>
+            </div>
+            <!-- 单击事件的配置 -->
+            <div v-if="jtem.eventName === 'click'">
+              <div  class="event-item">
+                点击后的操作：
+                <el-select
+                    v-model="jtem.config.type"
+                    style="width: 130px;"
+                  >
+                    <el-option
+                      v-for="item in eventTypeOptions"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value"
+                    />
+                  </el-select>
+              </div>
+            </div>
+            <div v-if="jtem.config.type === 'video'"  class="event-item">
+               <span> 视频url </span>
+                <el-input
+                  v-model="jtem.config.url"
               />
+            </div>
+            <div v-else-if="jtem.config.type === 'view'"  class="event-item">
+               跳转视角：
+                <el-select
+                    v-model="jtem.config.view"
+                    style="width: 130px;"
+                  >
+                    <el-option
+                      v-for="item in []"
+                      :key="item.value"
+                      :label="item.label"
+                      :value="item.value"
+                    />
+                  </el-select>
             </div>
           </div>
         </section>
@@ -80,8 +119,23 @@ const eventOptions = [
   {
     label: '图标展示',
     value: 'showIcon'
+  },
+  {
+    label: '单击事件',
+    value: 'click'
   }
 ];
+
+const eventTypeOptions = [
+  {
+    label: '显示视频',
+    value: 'video',
+  },
+  {
+    label: '视角跳转',
+    value: 'view',
+  },
+]
 
 const app = inject('app') as InitThree
 const threeStore = useThreeStore();
@@ -130,6 +184,7 @@ const selectEvent = (value: any, item: any) => {
     uuid: uuidv4(),
     eventName: value,
     open: false,
+    config: {}
   };
   item.event.push(obj);
   templateClick.value = '';
@@ -144,9 +199,17 @@ const eventOpenChange = (e: any, jtem: any, item: any) => {
       createSprite(app, modelName, layerName)
     } else if (eventName === 'showLabel') {
       creatShowTag(app, modelName, layerName, modelContent)
+    } else if (eventName === 'click') {
+      const mesh: any = app.scene.getObjectByName(modelName);
+      app.clickObj.push(mesh)
     }
   } else {
+    if (eventName !== 'click') {
       deleteMesh(app, modelName, layerName)
+    } else if (eventName === 'click') {
+      const mesh: any = app.scene.getObjectByName(modelName);
+      app.clickObj = app.clickObj.filter(item => item !== mesh)
+    }
   }
 };
 
@@ -154,6 +217,12 @@ const delteLayer = (item: any) => {
   const { modelName, layerName } = item
   deleteMesh(app, modelName, layerName)
   threeStore.deleteLayerData(item.uuid)
+}
+
+const eventClickConfig = (jtem: any, item: any) => {
+  if (jtem.eventName === 'click') {
+
+  }
 }
 
 onMounted(() => {

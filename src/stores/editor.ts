@@ -48,6 +48,7 @@ interface EventItem {
   uuid: string
   eventName: string
   open: boolean
+  config: any
 }
 
 
