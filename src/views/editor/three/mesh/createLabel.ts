@@ -17,6 +17,29 @@ function createBox(mesh: THREE.Object3D) {
   };
 }
 
+export function createSprite(app: InitThree, parentName: string, name: string) {
+  const texLoader = new THREE.TextureLoader();
+  const texture = texLoader.load('./卡口视频点.svg');
+  const spriteMaterial = new THREE.SpriteMaterial({
+    map: texture,
+  });
+  let sprite = new THREE.Sprite(spriteMaterial);
+  sprite.name = name;
+    // 控制精灵大小
+  sprite.scale.set(10, 10, 5);
+  // sprite.position.y = 5 / 2; //标签底部箭头和空对象标注点重合
+  const parentMesh: any = app.scene.getObjectByName(parentName);
+  const { size, center } = createBox(parentMesh);
+  const OFFSET = 2;
+  // 简单的判断
+  if (center.y == 0) {
+    sprite.position.y = size.y / 2 + OFFSET;
+  } else {
+    sprite.position.y = size.y + OFFSET;
+  }
+  parentMesh.add(sprite); //tag会标注在空对象obj对应的位置
+}
+
 export function creatShowTag(
   app: InitThree,
   parentName: string,
@@ -88,6 +111,9 @@ export function changeMeshVisible(app: InitThree, name: string, visible: boolean
 export function deleteMesh(app: InitThree, parentName: string, name: string) {
   const parentMesh: any = app.scene.getObjectByName(parentName);
   let mesh: any = app.scene.getObjectByName(name);
+  if (!mesh) {
+    return
+  }
   parentMesh.remove(mesh)
 
   mesh.traverse((obj: any) => {

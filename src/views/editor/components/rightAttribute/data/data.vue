@@ -69,7 +69,7 @@ import { Plus } from '@element-plus/icons-vue';
 import { CSS2DObject } from 'three/addons/renderers/CSS2DRenderer.js';
 // 引入CSS3模型对象CSS3DObject
 import { CSS3DObject } from 'three/addons/renderers/CSS3DRenderer.js';
-import { creatShowTag, deleteMesh } from '@/views/editor/three/mesh/createLabel'
+import { creatShowTag, deleteMesh, createSprite } from '@/views/editor/three/mesh/createLabel'
 
 
 const eventOptions = [
@@ -77,10 +77,10 @@ const eventOptions = [
     label: '数据标签',
     value: 'showLabel',
   },
-  // {
-  //   label: '隐藏数据标签',
-  //   value: 'hiddenLabel'
-  // }
+  {
+    label: '图标展示',
+    value: 'showIcon'
+  }
 ];
 
 const app = inject('app') as InitThree
@@ -136,11 +136,17 @@ const selectEvent = (value: any, item: any) => {
 };
 
 const eventOpenChange = (e: any, jtem: any, item: any) => {
-  const { modelName,layerName,modelContent } = item
+  const { eventName } = jtem
+  const { modelName, layerName, modelContent } = item
+
   if (e) {
-    creatShowTag(app, modelName, layerName, modelContent)
+    if (eventName === "showIcon") {
+      createSprite(app, modelName, layerName)
+    } else if (eventName === 'showLabel') {
+      creatShowTag(app, modelName, layerName, modelContent)
+    }
   } else {
-    deleteMesh(app, modelName, layerName)
+      deleteMesh(app, modelName, layerName)
   }
 };
 
