@@ -9,9 +9,8 @@ import { emitControlChange } from '@/views/editor/three/eventListen';
 // 引入CSS2渲染器CSS2DRenderer
 import { CSS2DRenderer } from 'three/addons/renderers/CSS2DRenderer.js';
 // 引入CSS3渲染器CSS3DRenderer
-import {CSS3DRenderer} from 'three/addons/renderers/CSS3DRenderer.js';
-
-
+import { CSS3DRenderer } from 'three/addons/renderers/CSS3DRenderer.js';
+import { emitClickListener } from '@/views/editor/three/eventListen'
 
 
 interface SeriesItem {
@@ -231,6 +230,7 @@ class InitThree {
       if (intersects.length > 0) {
         // 选中模型的第一个模型，设置为红色
         // intersects[0].object.material.color.set(0xff0000);
+        emitClickListener(intersects)
       }
     });
 

@@ -82,12 +82,13 @@
                 <el-select
                     v-model="jtem.config.view"
                     style="width: 130px;"
+                    @change="(e) => confirView(e,jtem,item) "
                   >
                     <el-option
-                      v-for="item in []"
-                      :key="item.value"
-                      :label="item.label"
-                      :value="item.value"
+                      v-for="ztem in threeStore.config.scene.view"
+                      :key="ztem.name"
+                      :label="ztem.name"
+                      :value="ztem.name"
                     />
                   </el-select>
             </div>
@@ -223,6 +224,11 @@ const eventClickConfig = (jtem: any, item: any) => {
   if (jtem.eventName === 'click') {
 
   }
+}
+
+
+function confirView(e: any,jtem: any,item: any) {
+ // console.log(e,jtem, item)
 }
 
 onMounted(() => {

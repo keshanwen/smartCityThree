@@ -32,7 +32,11 @@ export function handleModelName(mesh: THREE.Object3D) {
             z: Number(rotation.z),
           },
         };
+        item.ancestor = name
       }
+    }
+    if (item.parent?.ancestor) {
+      item.ancestor = item.parent?.ancestor;
     }
   });
 

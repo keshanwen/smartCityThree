@@ -20,18 +20,21 @@
 <script setup lang='ts'>
 import { ref, nextTick, onMounted, provide  } from 'vue'
 import * as THREE from 'three';
+import { app } from './index'
 import { useThreeStore } from '@/stores/editor'
 import { getContainerWH } from '@/views/editor/three/util'
 import InitThree from '@/views/editor/three/index'
 import { cretateBackground, plane } from '@/views/editor/three/mesh/createBackground.js'
 import rightAttribute from '@/views/editor/components/rightAttribute/index.vue'
 import viewParams from '@/views/editor/components/rightAttribute/viewParams.vue';
+import '@/views/editor/three/handEvent'
+
 
 
 let containerRef = ref()
 const threeStore = useThreeStore()
 
-let app: InitThree = new InitThree()  // 初始化 three 实例
+// let app: InitThree = new InitThree()  // 初始化 three 实例
 provide('app', app as InitThree) // 将 app 实例传递下去
 
 
