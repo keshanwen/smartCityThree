@@ -82,10 +82,23 @@
                 <el-select
                     v-model="jtem.config.view"
                     style="width: 130px;"
-                    @change="(e) => confirView(e,jtem,item) "
                   >
                     <el-option
                       v-for="ztem in threeStore.config.scene.view"
+                      :key="ztem.name"
+                      :label="ztem.name"
+                      :value="ztem.name"
+                    />
+                  </el-select>
+            </div>
+            <div v-else-if="jtem.config.type === 'roam'" class="event-item">
+              漫游路径：
+                <el-select
+                    v-model="jtem.config.roam"
+                    style="width: 130px;"
+                  >
+                    <el-option
+                      v-for="ztem in threeStore.config.scene.roam"
                       :key="ztem.name"
                       :label="ztem.name"
                       :value="ztem.name"
@@ -136,6 +149,10 @@ const eventTypeOptions = [
     label: '视角跳转',
     value: 'view',
   },
+  {
+    label: '漫游路径',
+    value: 'roam'
+  }
 ]
 
 const app = inject('app') as InitThree

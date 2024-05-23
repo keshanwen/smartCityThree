@@ -121,7 +121,7 @@ import { ref, reactive, inject, onMounted } from 'vue';
 import * as THREE from 'three';
 import { useThreeStore } from '@/stores/editor';
 import InitThree from '@/views/editor/three/index';
-import { changeView } from '@/views/editor/three/changeView'
+import { changeView, changeRoam } from '@/views/editor/three/changeView'
 
 const app = inject('app') as InitThree;
 const threeStore = useThreeStore();
@@ -237,24 +237,7 @@ function confirmRoamSet() {
 
 
 function changeRoamClick(obj: any) {
-  const view = obj.view
-  const viewLength = view.length
-  let i = 0
-  function next() {
-    if (i === viewLength) return
-    const { position, target } = view[i]
-    const { x, y, z } = position
-    const { x: tx, y: ty, z: tz } = target
-    const params = {
-      x,y,z,tx,ty,tz
-    }
-    const cb = () => {
-      i++
-      next()
-    }
-    changeView(app, params,cb)
-  }
-  next()
+ changeRoam(obj, app)
 }
 
 </script>

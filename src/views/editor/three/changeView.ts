@@ -49,3 +49,30 @@ export function changeView(app: InitThree, target: any = {}, cb?: any) {
 
   loop();
 }
+
+
+export function changeRoam(obj: any, app: InitThree) {
+  const view = obj.view;
+  const viewLength = view.length;
+  let i = 0;
+  function next() {
+    if (i === viewLength) return;
+    const { position, target } = view[i];
+    const { x, y, z } = position;
+    const { x: tx, y: ty, z: tz } = target;
+    const params = {
+      x,
+      y,
+      z,
+      tx,
+      ty,
+      tz,
+    };
+    const cb = () => {
+      i++;
+      next();
+    };
+    changeView(app, params, cb);
+  }
+  next();
+}
