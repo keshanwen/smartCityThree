@@ -2,7 +2,7 @@ import TWEEN from '@tweenjs/tween.js';
 import InitThree from '@/views/editor/three/index';
 
 
-export function changeView(app: InitThree, target: any = {}) {
+export function changeView(app: InitThree, target: any = {}, cb?: any) {
   const { x = 0,y = 0,z = 0, tx = 0, ty = 0, tz = 0} = target
   const tween = new TWEEN.Tween({
     // 相机开始坐标
@@ -38,6 +38,7 @@ export function changeView(app: InitThree, target: any = {}) {
     .onComplete(() => {
       // 完成的回调
       console.log('完成~~~~~~~~~');
+      cb && cb()
     })
     .easing(TWEEN.Easing.Sinusoidal.InOut); //使用二次缓动函数
 

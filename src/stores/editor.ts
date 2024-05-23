@@ -82,11 +82,17 @@ interface ViewItem {
  // bind: string
 }
 
-type View =  ViewItem[]
+type View = ViewItem[]
+
+
+interface RoamItem {
+  name: string
+  view: View[]
+}
 
 interface Scene {
   view: View;
-  roam: View[];
+  roam: RoamItem[];
 }
 
 // 3 维大屏数据
@@ -139,8 +145,8 @@ export const useThreeStore = defineStore('threeStore', () => {
     config.value.scene.view.push(item)
   };
 
-  const pushRoamItem = (arr: View) => {
-    config.value.scene.roam.push(arr)
+  const pushRoamItem = (arr: RoamItem) => {
+    config.value.scene.roam.push(arr);
   };
 
   return {

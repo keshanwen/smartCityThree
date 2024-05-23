@@ -54,7 +54,66 @@
           {{ item.name }}
          </div>
       </div>
+      <div>漫游路径 <span class="add-opeator" @click="showRoamViewSet = true">+ 添加漫游路径</span></div>
+      <!-- 漫游路径设置 -->
+      <div v-if="showRoamViewSet">
+        <div>
+            <div>
+            漫游名称
+            <el-input v-model="roamState.name" />
+          </div>
+        </div>
+         <div>相机视角 <span class="add-opeator" @click="addView">+ 添加当前视角</span></div>
+         <div v-for="(item, index) in roamState.path" :key="index">
+          <div>
+            <div>
+            视角名称
+            <el-input v-model="item.name" />
+            <div>视角参数</div>
+            <div>相机坐标</div>
+            <div>
+              <div>
+                <span>x</span>
+                <el-input-number v-model="item.position.x" />
+              </div>
+              <div>
+                <span>y</span>
+                <el-input-number v-model="item.position.y" />
+              </div>
+              <div>
+                <span>z</span>
+                <el-input-number v-model="item.position.z" />
+              </div>
+            </div>
+            <div>视点坐标</div>
+            <div>
+              <div>
+                <span>x</span>
+                <el-input-number v-model="item.target.x" />
+              </div>
+              <div>
+                <span>y</span>
+                <el-input-number v-model="item.target.y" />
+              </div>
+              <div>
+                <span>z</span>
+                <el-input-number v-model="item.target.z" />
+              </div>
+            </div>
+          </div>
+         </div>
+      </div>
+       <div class="ml-20">
+          <el-button @click="cancelRoamSet">取消</el-button>
+          <el-button type="primary" @click="confirmRoamSet">确定</el-button>
+        </div>
     </div>
+    <div class="data-wrap">
+        <div v-for="item in threeStore.config.scene.roam" :key="item.name" @click="() => changeRoamClick(item)" class="view-item">
+          {{ item.name }}
+         </div>
+    </div>
+  </div>
   </div>
 </template>
 <script setup lang="ts">
@@ -68,6 +127,8 @@ const app = inject('app') as InitThree;
 const threeStore = useThreeStore();
 
 let showViewSet = ref(false)
+let showRoamViewSet = ref(false)
+
 const state = reactive({
   name: '',
   position: {
@@ -82,6 +143,10 @@ const state = reactive({
   },
   // bind: '',
 });
+const roamState = reactive<any>({
+  name: '',
+  path: []
+})
 
 function resetState() {
   state.name = ''
@@ -92,6 +157,12 @@ function resetState() {
   state.target.y = 0
   state.target.z = 0
   showViewSet.value = false
+}
+
+function resetRoamState() {
+  roamState.name = ''
+  roamState.path = []
+  showRoamViewSet.value = false
 }
 
 
@@ -131,6 +202,60 @@ const changeViewClick = (item: any) => {
   changeView(app, params)
 }
 
+
+const addView = () => {
+  const obj = {
+    name: '',
+    position: {
+      x: 0,
+      y: 0,
+      z: 0
+    },
+    target: {
+      x: 0,
+      y: 0,
+      z: 0
+    }
+  }
+  roamState.path.push(obj)
+}
+
+function cancelRoamSet() {
+  resetRoamState()
+}
+
+
+function confirmRoamSet() {
+  const obj: any
+    = {
+    name: roamState.name,
+    view: JSON.parse(JSON.stringify(roamState.path))
+  }
+  threeStore.pushRoamItem(obj)
+  resetRoamState()
+}
+
+
+function changeRoamClick(obj: any) {
+  const view = obj.view
+  const viewLength = view.length
+  let i = 0
+  function next() {
+    if (i === viewLength) return
+    const { position, target } = view[i]
+    const { x, y, z } = position
+    const { x: tx, y: ty, z: tz } = target
+    const params = {
+      x,y,z,tx,ty,tz
+    }
+    const cb = () => {
+      i++
+      next()
+    }
+    changeView(app, params,cb)
+  }
+  next()
+}
 
 </script>
 
