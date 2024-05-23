@@ -63,15 +63,41 @@ interface LayerDataItem {
 
 interface Config {
   series: SeriesItem[];
-  layerData: LayerDataItem[]
+  layerData: LayerDataItem[];
+  scene: Scene;
 }
 
+interface ViewItem {
+  name: string;
+  position: {
+    x: number;
+    y: number;
+    z: number;
+  };
+  target: {
+    x: number;
+    y: number;
+    z: number;
+  };
+ // bind: string
+}
+
+type View =  ViewItem[]
+
+interface Scene {
+  view: View;
+  roam: View[];
+}
 
 // 3 维大屏数据
 export const useThreeStore = defineStore('threeStore', () => {
   let config = ref<Config>({
     series: [], // 各个模型数据
     layerData: [], // 数据图层信息
+    scene: {
+      view: [],
+      roam: []
+    }
   });
 
   let activeModel: any = ref(undefined) // 当前激活的模型
@@ -109,6 +135,14 @@ export const useThreeStore = defineStore('threeStore', () => {
      });
   }
 
+  const pushViewItem = (item: ViewItem) => {
+    config.value.scene.view.push(item)
+  };
+
+  const pushRoamItem = (arr: View) => {
+    config.value.scene.roam.push(arr)
+  };
+
   return {
     config,
     activeModel,
@@ -119,5 +153,7 @@ export const useThreeStore = defineStore('threeStore', () => {
     resetActiveModel,
     pushLayerData,
     deleteLayerData,
+    pushViewItem,
+    pushRoamItem
   };
 });
