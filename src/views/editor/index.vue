@@ -6,7 +6,10 @@
       </div>
     </div>
     <div class="context">
-
+      <div v-for="item in store.state" :key="item.uuid" :class="[item.type === '3D' ? 'three-editor' : '']">
+        <ThreePreview v-if="item.type === '3D'"/>
+        <div v-else>我不是 3D</div>
+      </div>
     </div>
     <div class="right"></div>
   </div>
@@ -18,6 +21,7 @@ import { useRoute, useRouter } from 'vue-router'
 import Button from '@/views/editor/components/button/index.vue'
 import Bar from '@/views/editor/components/bar/index.vue'
 import Switch from '@/views/editor/components/switch/index.vue'
+import ThreePreview from '@/views/editor/preView.vue'
 
 const componentType = [
   {
@@ -78,6 +82,10 @@ const cilckNav = (item: any) => {
   }
   .context {
     flex: 1;
+    .three-editor {
+      width: 100%;
+      height: 100%;
+    }
   }
   .right {
     width: 300px;

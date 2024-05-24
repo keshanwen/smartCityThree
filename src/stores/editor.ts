@@ -108,8 +108,11 @@ export const useThreeStore = defineStore('threeStore', () => {
 
   let activeModel: any = ref(undefined) // 当前激活的模型
 
-  const changeConfig = (key: string,value: any) => {
-    config.value[key] = value
+  const changeConfig = (obj: any) => {
+    config.value.series = obj.series;
+    config.value.layerData = obj.layerData
+    config.value.scene.view = obj.scene.view
+    config.value.scene.roam = obj.scene.roam
   }
 
   const pushSeries = (obj: any) => {

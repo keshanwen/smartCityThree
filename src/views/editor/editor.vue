@@ -3,7 +3,7 @@
       <!-- 3D 场景 -->
       <div class="left">
         <div class="opeator">
-          <div class="back">
+          <div class="back" @click="goIndex">
             < 返回可视化看板
           </div>
         </div>
@@ -18,22 +18,28 @@
     </div>
 </template>
 <script setup lang='ts'>
-import { ref, nextTick, onMounted, provide } from 'vue'
+import { ref, nextTick, onMounted, provide, onUnmounted } from 'vue'
 import * as THREE from 'three';
 import { app } from './index'
-import { useThreeStore } from '@/stores/editor'
+import {useEditorStore, useThreeStore } from '@/stores/editor'
 import { getContainerWH } from '@/views/editor/three/util'
 import InitThree from '@/views/editor/three/index'
 import { cretateBackground, plane } from '@/views/editor/three/mesh/createBackground.js'
 import rightAttribute from '@/views/editor/components/rightAttribute/index.vue'
 import viewParams from '@/views/editor/components/rightAttribute/viewParams.vue';
 import '@/views/editor/three/handEvent'
-
+import { useRouter } from 'vue-router'
+import { v4 as uuidv4 } from 'uuid';
+import { objectDirection } from 'three/examples/jsm/nodes/Nodes.js';
 
 
 
 let containerRef = ref()
+const store = useEditorStore()
 const threeStore = useThreeStore()
+const router = useRouter()
+
+
 
 // let app: InitThree = new InitThree()  // 初始化 three 实例
 provide('app', app as InitThree) // 将 app 实例传递下去
@@ -70,8 +76,30 @@ async function init() {
 init()
 
 
+const goIndex = () => {
+  router.push({
+    path: '/'
+  })
+  const obj = {
+    type: '3D',
+    uuid: uuidv4(),
+    config: JSON.parse(JSON.stringify(threeStore.config))
+  }
+  store.pushState(obj)
+  // 保存信息
+  localStorage.setItem('threeStore',JSON.stringify(threeStore.config))
+}
+
+
 onMounted(() => {
   app.appendParent(containerRef.value)
+  console.log(threeStore, 'Onmounted~~~~~~~~')
+})
+
+
+onUnmounted(() => {
+  // 这里需要卸载 app 的信息, 这里为了方便不清空缓存
+  console.log(app, 'app~~~~~unmounted')
 })
 
 </script>
