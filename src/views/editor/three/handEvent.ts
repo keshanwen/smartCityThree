@@ -2,6 +2,9 @@ import { onClickListener } from '@/views/editor/three/eventListen';
 import { useThreeStore } from '@/stores/editor';
 import { changeView, changeRoam } from '@/views/editor/three/changeView';
 import { app } from '@/views/editor/index'
+import { ElMessageBox, ElSwitch } from 'element-plus';
+import Video from '@/views/editor/components/video.vue';
+import { ref, h } from 'vue';
 
 
 const threeStore = useThreeStore();
@@ -55,6 +58,7 @@ function handleClick(arr: any[]) {
     changeView(app, params);
   } else if (type === 'video') {
     const url = config.url
+    showComponet(url);
   } else if (type === 'roam') {
     const roam = config.roam;
     const roamMessage: any = threeStore.config.scene.roam.find(
@@ -64,3 +68,26 @@ function handleClick(arr: any[]) {
     changeRoam(roamMessage, app);
   }
 }
+
+
+function showComponet(url: string) {
+  ElMessageBox({
+    title: 'Message',
+    showConfirmButton: false,
+    // Should pass a function if VNode contains dynamic props
+    message: () =>
+      h(Video, {
+        url,
+      }),
+  })
+    .then((res) => {
+      console.log('then', res);
+    })
+    .catch((error) => {
+      console.log(error, 'catch');
+    });
+
+}
+
+
+

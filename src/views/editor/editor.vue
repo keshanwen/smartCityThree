@@ -18,7 +18,7 @@
     </div>
 </template>
 <script setup lang='ts'>
-import { ref, nextTick, onMounted, provide  } from 'vue'
+import { ref, nextTick, onMounted, provide } from 'vue'
 import * as THREE from 'three';
 import { app } from './index'
 import { useThreeStore } from '@/stores/editor'
@@ -28,6 +28,7 @@ import { cretateBackground, plane } from '@/views/editor/three/mesh/createBackgr
 import rightAttribute from '@/views/editor/components/rightAttribute/index.vue'
 import viewParams from '@/views/editor/components/rightAttribute/viewParams.vue';
 import '@/views/editor/three/handEvent'
+
 
 
 

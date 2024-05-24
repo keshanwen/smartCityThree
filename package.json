@@ -11,6 +11,7 @@
     "type-check": "vue-tsc --build --force"
   },
   "dependencies": {
+    "@nutui/nutui": "^3.3.8",
     "@tweenjs/tween.js": "^23.1.2",
     "dat.gui": "^0.7.9",
     "element-plus": "^2.7.3",
