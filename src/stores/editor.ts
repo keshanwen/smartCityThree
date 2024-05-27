@@ -6,11 +6,19 @@ export const useEditorStore = defineStore('editor', () => {
 
   const state: any = ref([])
 
+
+  const activeComponent = ref()
+
   const pushState = (component: any) => {
     state.value.push(component);
   }
 
-  return { state, pushState };
+
+  const confirmActiveComponent = (component: any) => {
+    activeComponent.value = component
+  }
+
+  return { state, activeComponent, pushState, confirmActiveComponent };
 });
 
 interface ModelMessage {

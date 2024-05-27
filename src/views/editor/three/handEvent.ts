@@ -1,4 +1,7 @@
-import { onClickListener } from '@/views/editor/three/eventListen';
+import {
+  onClickListener,
+  onOuterEvent,
+} from '@/views/editor/three/eventListen';
 import { useThreeStore } from '@/stores/editor';
 import { changeView, changeRoam } from '@/views/editor/three/changeView';
 import { app } from '@/views/editor/index'
@@ -89,5 +92,33 @@ function showComponet(url: string) {
 
 }
 
+
+// 监听外部绑定事件
+onOuterEvent((params: any) => {
+  const { view, roam } = params;
+  if (view) {
+      const viewMessage: any = threeStore.config.scene.view.find(
+        (item: any) => item.name === view
+      );
+      if (!viewMessage) return;
+      const params = {
+        // 相机结束坐标
+        x: viewMessage.position.x,
+        y: viewMessage.position.y,
+        z: viewMessage.position.z,
+        // 相机结束指向的目标观察点
+        tx: viewMessage.target.x,
+        ty: viewMessage.target.y,
+        tz: viewMessage.target.z,
+      };
+      changeView(app, params);
+  } else if (roam) {
+     const roamMessage: any = threeStore.config.scene.roam.find(
+       (item: any) => item.name === roam
+     );
+     if (!roamMessage) return;
+     changeRoam(roamMessage, app);
+  }
+})
 
 

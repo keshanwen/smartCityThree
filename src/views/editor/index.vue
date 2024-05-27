@@ -6,22 +6,65 @@
       </div>
     </div>
     <div class="context">
-      <div v-for="item in store.state" :key="item.uuid" :class="[item.type === '3D' ? 'three-editor' : '']">
+      <div v-for="(item,index) in store.state" @click="() => clickComponent(item)" :key="item.uuid" :style="styleTop(index, item)" :class="[item.type === '3D' ? 'three-editor' : 'other-type']">
         <ThreePreview v-if="item.type === '3D'"/>
-        <div v-else>我不是 3D</div>
+        <Button  v-else-if="item.type === 'button'" :item="item"></Button>
+        <Switch v-else-if="item.type === 'switch'"></Switch>
+        <Bar  v-else-if="item.type === 'bar'"></Bar>
       </div>
     </div>
-    <div class="right"></div>
+    <div class="right">
+      <div v-if="store.activeComponent?.type === 'button'">
+        <el-input v-model="store.activeComponent.config.text" />
+        <div>绑定视角</div>
+
+         <el-select v-model="store.activeComponent.config.view" clearable>
+          <el-option
+            v-for="item in threeConfig.scene.view"
+            :key="item.name"
+            :label="item.name"
+            :value="item.name"
+          />
+        </el-select>
+
+        <div>
+          绑定漫游视角
+        </div>
+
+
+        <el-select v-model="store.activeComponent.config.roam" clearable>
+          <el-option
+            v-for="item in threeConfig.scene.roam"
+            :key="item.name"
+            :label="item.name"
+            :value="item.name"
+          />
+        </el-select>
+
+
+        <!-- {{ threeConfig }} -->
+      </div>
+      <div v-else-if="store.activeComponent?.type === 'switch'">
+
+      </div>
+      <div v-else-if="store.activeComponent?.type === 'bar'">
+
+      </div>
+      <div v-else-if="store.activeComponent?.type === '3D'">
+
+      </div>
+    </div>
   </div>
 </template>
 <script setup lang="tsx">
-import { ref, onMounted } from 'vue'
+import { ref, computed, onMounted } from 'vue'
 import { useEditorStore } from '@/stores/editor'
 import { useRoute, useRouter } from 'vue-router'
 import Button from '@/views/editor/components/button/index.vue'
 import Bar from '@/views/editor/components/bar/index.vue'
 import Switch from '@/views/editor/components/switch/index.vue'
 import ThreePreview from '@/views/editor/preView.vue'
+import { v4 as uuidv4 } from 'uuid';
 
 const componentType = [
   {
@@ -46,16 +89,66 @@ const router = useRouter()
 const store = useEditorStore()
 
 
+const threeConfig = computed(() => {
+  return store.state.find((item: any) => {
+    return item.type === '3D'
+  })?.config
+})
+
+
+const styleTop = (index: number,item: any) => {
+  if (index === 0) {
+    return {}
+  }
+  const obj: any = {
+    // left: '10px',
+    top: index * 60 + 'px'
+  }
+  if (item.type === 'bar') {
+    obj.right = '10px'
+  } else {
+    obj.left = '10px'
+  }
+  return obj
+}
+
+
 const cilckNav = (item: any) => {
   if (item.type === '3D') {
     router.push({
       path: '/editor',
     })
+  } else {
+    const { type } = item
+    const obj = {
+      type,
+      uuid: uuidv4(),
+      config: {}
+    }
+    if (type === 'button') {
+      obj.config = {
+        text: '按钮',
+        view: '',
+        roam: ''
+      }
+    } else if (type === 'switch') {
+
+    } else if (type === 'bar') {
+
+    }
+    store.pushState(obj)
   }
+
+}
+
+const clickComponent = (item: any) => {
+  store.confirmActiveComponent(item)
 }
 
 
-
+onMounted(() => {
+  console.log(store.state, 'store.state~~~')
+})
 
 
 
@@ -81,10 +174,18 @@ const cilckNav = (item: any) => {
     }
   }
   .context {
+    position: relative;
     flex: 1;
     .three-editor {
+      position: relative;
+      left: 0;
+      top: 0;
       width: 100%;
       height: 100%;
+    }
+    .other-type {
+      position: absolute;
+     // left: 10px;
     }
   }
   .right {

@@ -24,3 +24,13 @@ export const emitClickListener = (playload?: any) => {
 export const onClickListener = (cb: any) => {
   emitter.on('clickListener', cb);
 }
+
+// 外部事件的触发
+export const emitOuterEvent = (playload?: any) => {
+  emitter.emit('outerEvent', playload);
+};
+
+// 监听外部事件的触发
+export const onOuterEvent = (cb: any) => {
+  emitter.on('outerEvent', cb);
+};
