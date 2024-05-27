@@ -137,6 +137,10 @@ const options = [
     value: 'http://localhost:1949/models/科技_工业建筑_006.glb',
     label: '科技_工业建筑_006',
   },
+  {
+    value: 'http://localhost:1949/models/有光源.glb',
+    label: '粮仓',
+  }
 ];
 
 
@@ -145,6 +149,9 @@ const options = [
 const selectModel = (url: string) => {
   app.GLTFLoader.load(url, (gltf) => {
     app.scene.add(gltf.scene)
+    if (url === 'http://localhost:1949/models/有光源.glb') {
+      gltf.scene.position.y += 2
+    }
     const model = assemblyData(gltf.scene, url)
     threeStore.pushSeries(model)
   })
