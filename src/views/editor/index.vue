@@ -9,8 +9,8 @@
       <div v-for="(item,index) in store.state" @click="() => clickComponent(item)" :key="item.uuid" :style="styleTop(index, item)" :class="[item.type === '3D' ? 'three-editor' : 'other-type']">
         <ThreePreview v-if="item.type === '3D'"/>
         <Button  v-else-if="item.type === 'button'" :item="item"></Button>
-        <Switch v-else-if="item.type === 'switch'"></Switch>
-        <Bar  v-else-if="item.type === 'bar'"></Bar>
+        <Switch v-else-if="item.type === 'switch'" :item="item"></Switch>
+        <Bar  v-else-if="item.type === 'bar'" :item="item"></Bar>
       </div>
     </div>
     <div class="right">
@@ -45,7 +45,28 @@
         <!-- {{ threeConfig }} -->
       </div>
       <div v-else-if="store.activeComponent?.type === 'switch'">
-
+        <div>开启显示的文字</div>
+        <el-input v-model="store.activeComponent.config.activeText" />
+        <div>关闭时的文字</div>
+        <el-input v-model="store.activeComponent.config.inactiveText" />
+        <div>开启绑定的图层显示</div>
+          <el-select v-model="store.activeComponent.config.acitveEvent" multiple clearable>
+          <el-option
+            v-for="item in labelLayer"
+            :key="item.layerName"
+            :label="item.layerName"
+            :value="item.layerName"
+          />
+        </el-select>
+        <div>关闭隐藏的图层显示</div>
+          <el-select v-model="store.activeComponent.config.inactiveEvent" multiple clearable>
+          <el-option
+            v-for="item in labelLayer"
+            :key="item.layerName"
+            :label="item.layerName"
+            :value="item.layerName"
+          />
+        </el-select>
       </div>
       <div v-else-if="store.activeComponent?.type === 'bar'">
 
@@ -96,6 +117,15 @@ const threeConfig = computed(() => {
 })
 
 
+const labelLayer = computed(() => {
+  const layerData = threeConfig?.value?.layerData
+
+  return layerData?.filter((item: any) => {
+    return item.event.some( (jtem: any) => jtem.eventName === 'showLabel')
+  })
+})
+
+
 const styleTop = (index: number,item: any) => {
   if (index === 0) {
     return {}
@@ -132,7 +162,12 @@ const cilckNav = (item: any) => {
         roam: ''
       }
     } else if (type === 'switch') {
-
+      obj.config = {
+        activeText: '开',
+        inactiveText: "关",
+        acitveEvent: [],
+        inactiveEvent: []
+      }
     } else if (type === 'bar') {
 
     }
