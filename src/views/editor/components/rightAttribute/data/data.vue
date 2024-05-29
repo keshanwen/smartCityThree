@@ -24,12 +24,12 @@
       <el-button type="primary" @click="confirmLayer">确定</el-button>
     </div>
     <div class="data-wrap">
-      <div v-for="item in threeStore.config.layerData" class="layer-data-item">
+      <div v-for="item in threeStore.config.layerData" @click="() => confirmActiveLayerName(item)" class="layer-data-item">
         <div class="layer-name">
           <div style="color: red">{{ item.layerName }}</div>
           <div class="delete" @click="() => delteLayer(item)">删除</div>
         </div>
-        <section class="pl-20">
+        <section v-if="item.layerName === activeLayerName" class="pl-20">
           <div class="add-opeator">
             <div class="add-name">添加事件</div>
             <el-select
@@ -171,6 +171,8 @@ const eventTypeOptions = [
   }
 ]
 
+
+let activeLayerName = ref('')
 const app = inject('app') as InitThree
 const threeStore = useThreeStore();
 
@@ -183,6 +185,10 @@ const layerMessage = reactive({
   event: [],
 });
 let templateClick = ref('');
+
+const confirmActiveLayerName = (item: any) => {
+  activeLayerName.value = item.layerName
+}
 
 const addLayer = () => {
   showLayerSet.value = true;

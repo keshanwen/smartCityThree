@@ -90,7 +90,7 @@ const goIndex = () => {
   }
   store.pushState(obj)
   // 保存信息
-  localStorage.setItem('threeStore',JSON.stringify(threeStore.config))
+  // localStorage.setItem('threeStore',JSON.stringify(threeStore.config))
 }
 
 
