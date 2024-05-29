@@ -105,6 +105,18 @@
                     />
                   </el-select>
             </div>
+            <div v-else-if="jtem.config.type === 'link'">
+               <span> 名称 </span>
+                <el-input
+                  v-model="jtem.config.link"
+              />
+              <div>
+                参数
+              </div>
+               <el-input
+                  v-model="jtem.config.linkParams"
+              />
+            </div>
           </div>
         </section>
       </div>
@@ -152,6 +164,10 @@ const eventTypeOptions = [
   {
     label: '漫游路径',
     value: 'roam'
+  },
+  {
+    label: '联动',
+    value: 'link'
   }
 ]
 

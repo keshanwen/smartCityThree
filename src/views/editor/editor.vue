@@ -78,7 +78,10 @@ init()
 
 const goIndex = () => {
   router.push({
-    path: '/'
+    path: '/',
+    query: {
+      edit: '1'
+    }
   })
   const obj = {
     type: '3D',

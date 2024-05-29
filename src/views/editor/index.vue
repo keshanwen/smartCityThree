@@ -69,7 +69,15 @@
         </el-select>
       </div>
       <div v-else-if="store.activeComponent?.type === 'bar'">
-
+        <div>开启联动的图层</div>
+          <el-select v-model="store.activeComponent.config.link" multiple clearable>
+          <el-option
+            v-for="item in linkLayer"
+            :key="item.link"
+            :label="item.link"
+            :value="item.link"
+          />
+        </el-select>
       </div>
       <div v-else-if="store.activeComponent?.type === '3D'">
 
@@ -86,6 +94,7 @@ import Bar from '@/views/editor/components/bar/index.vue'
 import Switch from '@/views/editor/components/switch/index.vue'
 import ThreePreview from '@/views/editor/preView.vue'
 import { v4 as uuidv4 } from 'uuid';
+import { link } from 'fs'
 
 const componentType = [
   {
@@ -107,6 +116,7 @@ const componentType = [
 ]
 
 const router = useRouter()
+const route = useRoute()
 const store = useEditorStore()
 
 
@@ -124,6 +134,30 @@ const labelLayer = computed(() => {
     return item.event.some( (jtem: any) => jtem.eventName === 'showLabel')
   })
 })
+
+
+const linkLayer = computed(() => {
+  const layerData = threeConfig?.value?.layerData
+
+  let arr: any = []
+
+  layerData.forEach((item: any) => {
+    const { event = [] } = item
+    event.forEach((jtem: any) => {
+      const { eventName, open, config = {} } = jtem
+      if (open && eventName === 'click' && config?.type === 'link') {
+        const obj = {
+          link: config?.link
+        }
+        arr.push(obj)
+      }
+    })
+  })
+
+  return arr
+})
+
+
 
 
 const styleTop = (index: number,item: any) => {
@@ -145,6 +179,7 @@ const styleTop = (index: number,item: any) => {
 
 const cilckNav = (item: any) => {
   if (item.type === '3D') {
+    console.log(route.query, 'query~~~~~~~~~')
     router.push({
       path: '/editor',
     })
@@ -169,7 +204,9 @@ const cilckNav = (item: any) => {
         inactiveEvent: []
       }
     } else if (type === 'bar') {
-
+      obj.config = {
+        link: []
+      }
     }
     store.pushState(obj)
   }

@@ -40,7 +40,7 @@ export function changeView(app: InitThree, target: any = {}, cb?: any) {
       console.log('完成~~~~~~~~~');
       cb && cb()
     })
-    .easing(TWEEN.Easing.Sinusoidal.InOut); //使用二次缓动函数
+    // .easing(TWEEN.Easing.Sinusoidal.InOut); //使用二次缓动函数
 
   function loop() {
     tween.update();

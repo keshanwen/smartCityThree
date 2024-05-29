@@ -1,6 +1,7 @@
 import {
   onClickListener,
   onOuterEvent,
+  emitOuterEvent,
 } from '@/views/editor/three/eventListen';
 import { useThreeStore } from '@/stores/editor';
 import { changeView, changeRoam } from '@/views/editor/three/changeView';
@@ -69,6 +70,14 @@ function handleClick(arr: any[]) {
     );
     if (!roamMessage) return;
     changeRoam(roamMessage, app);
+  } else if (type === 'link') {
+    const { link, linkParams } = config;
+
+    emitOuterEvent({
+      link,
+      linkParams,
+    });
+    console.log(link, linkParams, 'linkParams~~~~~~~');
   }
 }
 
